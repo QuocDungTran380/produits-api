@@ -7,7 +7,15 @@ const router = express.Router();
 const productsController = new ProductController();
 
 // GET - Récupérer tous les livres
-router.get("/", productsController.getProducts);
+router.get("/", (req: Request, res: Response) => {
+    if (req.query.minPrice && req.query.maxPrice) {
+        productsController.filterProductByPrice(req, res);
+    } else if (req.query.minStock && req.query.minStock) {
+        productsController.filterProductByStock(req, res);
+    } else {
+        productsController.getAllProducts(req, res);
+    }
+});
 
 router.post("/", productsController.addProduct);
 

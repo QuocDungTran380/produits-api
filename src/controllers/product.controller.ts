@@ -2,30 +2,35 @@ import { Request, Response } from "express";
 import { ProductService } from "../services/product.service";
 
 export class ProductController {
-    public async getProducts(req: Request, res: Response): Promise<void> {
-        console.log(req.query);
+    public async getAllProducts(req: Request, res: Response): Promise<void> {
         var productsList;
-        if (req.query.minPrice && req.query.maxPrice) {
+        productsList = await ProductService.getAllProducts();
+        res.status(200).json(productsList);
+    }
+
+    public async filterProductByPrice(req: Request, res: Response): Promise<void> {
+        var productsList;
+        const priceRegex = /^\d+(.\d{1,2})?$/;
+        if (priceRegex.test(req.query.minPrice as string) && priceRegex.test(req.query.maxPrice as string)) {
             const minPrice = parseFloat(req.query.minPrice as string);
             const maxPrice = parseFloat(req.query.maxPrice as string);
-            if (!isNaN(minPrice) && !isNaN(maxPrice)) {
-                productsList = await ProductService.getProductsByPrice(minPrice, maxPrice);
-                res.status(200).json(productsList);
-            } else {
-                res.status(400).json({ message: "Requête invalide" });
-            }
-        } else if (req.query.minStock && req.query.maxStock) {
+            productsList = await ProductService.getProductsByPrice(minPrice, maxPrice);
+            res.status(200).json(productsList);
+        } else {
+            res.status(400).json({ message: "Requête invalide" });
+        }
+    }
+
+    public async filterProductByStock(req: Request, res: Response): Promise<void> {
+        var productsList;
+        const quantityRegex = /^\d+$/;
+        if (quantityRegex.test(req.query.minStock as string) && quantityRegex.test(req.query.maxStock as string)) {
             const minStock = parseInt(req.query.minStock as string);
             const maxStock = parseInt(req.query.maxStock as string);
-            if (!isNaN(minStock) && !isNaN(maxStock)) {
-                productsList = await ProductService.getProductsByStock(minStock, maxStock);
-                res.status(200).json(productsList);
-            } else {
-                res.status(400).json({ message: "Requête invalide" });
-            }
-        } else {
-            productsList = await ProductService.getAllProducts();
+            productsList = await ProductService.getProductsByStock(minStock, maxStock);
             res.status(200).json(productsList);
+        } else {
+            res.status(400).json({ message: "Requête invalide" });
         }
     }
 
