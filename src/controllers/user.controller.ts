@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
 import jwt from 'jsonwebtoken'
+import { config } from '../utils/config';
 
 export class UserController {
     public async registerUser(req: Request, res: Response) {
@@ -23,7 +24,7 @@ export class UserController {
             const password = req.body.password;
             await UserService.loginUser(email, password).then((result) => {
                 if (result) {
-                    var payload = jwt.verify(result, "f49b9887eaf6064cc86938c5093c01a7b938eb3903d91df24cd6ab643184f2de") as jwt.JwtPayload;
+                    var payload = jwt.verify(result, config.jwtSecret) as jwt.JwtPayload;
                     res.status(200).json({message: "Access token: " + result});
                 } else {
                     res.status(401).json({message: "Email ou mot de passe non valide"})

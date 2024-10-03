@@ -1,9 +1,7 @@
 import { User } from "../interfaces/user.interface";
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
+import { config } from '../utils/config';
 
 export class UserService {
 
@@ -41,7 +39,7 @@ export class UserService {
             return u.email == email
         });
         if (foundUser && password == foundUser.password) {
-            return jwt.sign({email: email, accountType: foundUser.perms}, "f49b9887eaf6064cc86938c5093c01a7b938eb3903d91df24cd6ab643184f2de");
+            return jwt.sign({email: email, accountType: foundUser.perms}, config.jwtSecret);
 
         } else {
             return null;

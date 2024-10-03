@@ -3,7 +3,7 @@
         "id": 1,
         "email": "john@gmail.com",
         "password": "m38rmF$",
-        "perms": 0
+        "perms": 1
     },
     {
         "id": 2,
@@ -15,7 +15,7 @@
         "id": 3,
         "email": "kevin@gmail.com",
         "password": "kev02937@",
-        "perms": 0
+        "perms": 1
     },
     {
         "id": 4,
@@ -27,19 +27,19 @@
         "id": 5,
         "email": "derek@gmail.com",
         "password": "jklg*_56",
-        "perms": 0
+        "perms": 1
     },
     {
         "id": 6,
         "email": "david_r@gmail.com",
         "password": "3478*#54",
-        "perms": 0
+        "perms": 1
     },
     {
         "id": 7,
         "email": "miriam@gmail.com",
         "password": "f238&@*$",
-        "perms": 0
+        "perms": 1
     },
     {
         "id": 8,
@@ -51,18 +51,12 @@
         "id": 9,
         "email": "kate@gmail.com",
         "password": "kfejk@*_",
-        "perms": 1
+        "perms": 0
     },
     {
         "id": 10,
         "email": "jimmie@gmail.com",
         "password": "klein*#%*",
         "perms": 0
-    },
-    {
-        "id": 74,
-        "email": "john@gmail.cm",
-        "password": "m38rmF$",
-        "perms": 2
     }
 ]
