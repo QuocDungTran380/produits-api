@@ -1,4 +1,6 @@
 import express, { Request, Response } from 'express';
+import { productsRoute } from './routes/product.route';
+import { userRoute } from './routes/user.route';
 
 const app = express();
 
@@ -10,7 +12,8 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello, TypeScript with Express!');
 });
 
-const productsRoute = require("./routes/product.route");
 app.use("/products", productsRoute);
+
+app.use("/users", userRoute);
 
 export default app;

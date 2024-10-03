@@ -1,5 +1,5 @@
 import app from './app';
-import PopulateDB from './populateBD';
+import { PopulateProducts, PopulateUsers } from './populateBD';
 
 const port = 3000;
 
@@ -8,4 +8,5 @@ app.listen(port, () => {
   console.log(`Serveur en écoute sur <http://localhost>:${port}`);
 });
 
-PopulateDB();
+PopulateProducts();
+PopulateUsers();

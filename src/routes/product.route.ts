@@ -1,13 +1,13 @@
+import express, { Router } from "express";
 import { Request, Response } from "express";
 import { ProductController } from "../controllers/product.controller";
 
-const express = require('express');
-const router = express.Router();
+const productsRoute = Router();
 
 const productsController = new ProductController();
 
 // GET - Récupérer tous les livres
-router.get("/", (req: Request, res: Response) => {
+productsRoute.get("/", (req: Request, res: Response) => {
     if (req.query.minPrice && req.query.maxPrice) {
         productsController.filterProductByPrice(req, res);
     } else if (req.query.minStock && req.query.minStock) {
@@ -17,6 +17,8 @@ router.get("/", (req: Request, res: Response) => {
     }
 });
 
-router.post("/", productsController.addProduct);
+productsRoute.post("/", productsController.addProduct);
+productsRoute.put("/:id", productsController.modifyProduct);
+productsRoute.delete("/:id", productsController.deleteProduct);
 
-module.exports = router;
+export {productsRoute};

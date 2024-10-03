@@ -35,20 +35,67 @@ export class ProductController {
     }
 
     public async addProduct(req: Request, res: Response): Promise<void> {
-        if (req.body.name, req.body.description, req.body.category, req.body.quantity, req.body.price) {
-            const name = req.body.name as string;
-            const description = req.body.description as string;
-            const category = req.body.category as string;
-            const quantity = req.body.quantity as number;
-            const price = req.body.price as number;
-            if (name && description && category && quantity && price) {
-                await ProductService.addProduct(name, description, category, quantity, price).then((result) => {
+        if (req.body.title, req.body.description, req.body.category, req.body.quantity, req.body.price) {
+            const title = req.body.title
+            const description = req.body.description;
+            const category = req.body.category;
+            const quantity = Number(req.body.quantity);
+            const price = Number(req.body.price);
+            try {
+                await ProductService.addProduct(title, description, category, quantity, price).then((result) => {
                     if (result == 1) {
                         res.status(201).json({ message: "Produit ajouté" });
                     } else {
                         res.status(400).json({ message: "Requête invalide" });
                     }
                 });
+            } catch {
+                res.status(400).json({ message: "Requête invalide" });
+            }
+        }
+    }
+    public async modifyProduct(req: Request, res: Response): Promise<void> {
+        if (req.params.id && (req.body.title || req.body.description || req.body.quantity || req.body.price)) {
+            const titleRegex = /^[a-zA-Z]{3,50}$/;
+            const descriptionRegex = /^[a-zA-Z]{3,100}$/;
+            const priceRegex = /^\d+(.\d{1,2})?$/;
+            const quantityRegex = /^\d+$/;
+
+            const id = Number(req.params.id);
+            const title = req.body?.title;
+            const description = req.body?.description;
+            const quantity = Number(req.body?.quantity);
+            const price = Number(req.body?.price);
+
+            if (quantityRegex.test(id.toString()) && titleRegex.test(title) && descriptionRegex.test(description) && quantityRegex.test(quantity.toString()) && priceRegex.test(price.toString())) {
+                await ProductService.modifyProduct(id, title, description, quantity, price).then((result) => {
+                    if (result == 1) {
+                        res.status(200).json({ message: "Produit modifié" });
+                    } else if (result == 0) {
+                        res.status(404).json({ messsage: "Produit non trouvé" });
+                    } else {
+                        res.status(400).json({ message: "Erreur" });
+                    }
+                })
+            } else {
+                res.status(400).json({ message: "Requête invalide" });
+            }
+        }
+    }
+
+    public async deleteProduct(req: Request, res: Response): Promise<void> {
+        if (req.params.id) {
+            const id = Number(req.params.id);
+            if (!isNaN(id)) {
+                await ProductService.deleteProduct(id).then((result) => {
+                    if (result == 1) {
+                        res.status(204).json({ message: "Produit supprimé" });
+                    } else if (result == 0) {
+                        res.status(404).json({ message: "Produit non trouvé" });
+                    }
+                });
+            } else {
+                res.status(400).json({ message: "Requête invalide" });
             }
         }
     }
