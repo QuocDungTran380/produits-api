@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { UserService } from "../services/user.service";
+import { UserService } from "../services/auth.service";
 import jwt from 'jsonwebtoken'
-import { config } from '../utils/config';
+import { JWT_SECRET } from "../utils/jwt.utils";
 
 export class UserController {
     public async registerUser(req: Request, res: Response) {
@@ -24,13 +24,17 @@ export class UserController {
             const password = req.body.password;
             await UserService.loginUser(email, password).then((result) => {
                 if (result) {
-                    var payload = jwt.verify(result, config.jwtSecret) as jwt.JwtPayload;
+                    res.setHeader('authorization', result);
                     res.status(200).json({message: "Access token: " + result});
                 } else {
                     res.status(401).json({message: "Email ou mot de passe non valide"})
                 }
             })
         }
+    }
+
+    public async getAdminData(req: Request, res: Response) {
+        res.json({ message: 'Données réservées aux administrateurs.' });
     }
 
 }

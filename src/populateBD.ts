@@ -1,6 +1,12 @@
 import fs from "fs";
+import bcrypt from "bcryptjs";
 import { Product } from "./interfaces/product.interface";
 import { User } from "./interfaces/user.interface";
+
+async function hashPassword(password: string) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    return hashedPassword;
+}
 
 export const PopulateProducts = () => {
     fetch('https://fakestoreapi.com/products')
@@ -22,13 +28,20 @@ export const PopulateProducts = () => {
 export const PopulateUsers = () => {
     fetch('https://fakestoreapi.com/users')
     .then(res => res.json())
-    .then(json => {
-        const modifiedUsers = json.map((user: User) => ({
+    .then(async json => {
+        const modifiedUsers = await Promise.all(json.map(async (user: User) => ({
             id: user.id,
             email: user.email,
-            password: user.password,
-            perms: Math.floor(Math.random() * 2)
-        }))
+            password: await hashPassword(user.password),
+            role: Math.floor(Math.random() * 2) == 0 ? "employe" : "admin"
+        })))
+        const adminUser: User = {
+            id: 380,
+            email: "admin@gmail.com",
+            password: await hashPassword("admin"),
+            role: "admin"
+        }
+        modifiedUsers.push(adminUser);
         const users = JSON.stringify(modifiedUsers, null, 4);
         fs.writeFileSync('users.json', users);
     })
