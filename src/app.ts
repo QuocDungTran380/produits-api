@@ -1,17 +1,15 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { productsRoute } from './routes/product.route';
 import { userRoute } from './routes/user.route';
 import { loadCertificate } from './middlewares/certificat.middleware';
 import https from 'https';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { errorMiddleware } from './middlewares/error.middleware';
 
 const app = express();
 
 let certificatOptions = loadCertificate();
 
-// Middleware de parsing du JSON
 app.use(express.json());
 
 const swaggerOptions = {
@@ -38,8 +36,6 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use("/products", productsRoute);
 
 app.use("/users", userRoute);
-
-app.use(errorMiddleware);
 
 const httpApp = https.createServer(certificatOptions, app);
 

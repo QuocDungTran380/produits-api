@@ -21,7 +21,7 @@ export const PopulateProducts = () => {
             price: product.price
         }))
         const products = JSON.stringify(modifiedProducts, null, 4);
-        fs.writeFileSync('products.json', products);
+        fs.writeFileSync('./database/products.json', products);
     })
 }
 
@@ -43,6 +43,6 @@ export const PopulateUsers = () => {
         }
         modifiedUsers.push(adminUser);
         const users = JSON.stringify(modifiedUsers, null, 4);
-        fs.writeFileSync('users.json', users);
+        fs.writeFileSync('./database/users.json', users);
     })
 }

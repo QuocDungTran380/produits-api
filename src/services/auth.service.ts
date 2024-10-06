@@ -21,11 +21,12 @@ export class UserService {
         const usersList = this.getData();
         const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
         if (emailRegex.test(email) && !usersList.find(u => u.email == email)) {
+            const hashedPassword = await bcrypt.hash(password, 10);
             const newUser: User = {
                 id: Math.floor(Math.random() * 100),
                 email,
-                password,
-                role: "Employee"
+                password: hashedPassword,
+                role: "employee"
             }
             usersList.push(newUser);
             this.writeData(usersList);
@@ -41,7 +42,7 @@ export class UserService {
             return u.email == email
         });
         if (foundUser && await bcrypt.compare(password, foundUser.password)) {
-            return jwt.sign({email: email, accountType: foundUser.role}, JWT_SECRET, { expiresIn: '1h' });
+            return jwt.sign({email, accountType: foundUser.role}, JWT_SECRET, { expiresIn: '1h' });
 
         } else {
             return null;

@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/auth.service";
-import jwt from 'jsonwebtoken'
-import { JWT_SECRET } from "../utils/jwt.utils";
+import logger from "../middlewares/error.middleware";
 
 export class UserController {
     public async registerUser(req: Request, res: Response) {
@@ -10,9 +9,10 @@ export class UserController {
             const password = req.body.password;
             await UserService.registerUser(email, password).then((result) => {
                 if (result == 1) {
-                    res.status(201).json({message: "Utilisateur ajouté"})
+                    logger.info(`User with email ${email} registered successfully`);
+                    res.status(201).json({message: "User registered successfully"});
                 } else {
-                    res.status(400).json({message: "Email invalide"})
+                    res.status(400).json({error: "Email invalid"})
                 }
             })
         }
@@ -24,10 +24,12 @@ export class UserController {
             const password = req.body.password;
             await UserService.loginUser(email, password).then((result) => {
                 if (result) {
-                    res.setHeader('authorization', result);
-                    res.status(200).json({message: "Access token: " + result});
+                    logger.info(`User with email ${email} logged in successfully`);
+                    res.setHeader('authorization', `Bearer ${result}`);
+                    res.status(200).json({token: result});
                 } else {
-                    res.status(401).json({message: "Email ou mot de passe non valide"})
+                    logger.error("Email or password invalid");
+                    res.status(401).json({error: "Email or password invalid"})
                 }
             })
         }

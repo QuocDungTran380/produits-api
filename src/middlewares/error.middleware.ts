@@ -1,6 +1,16 @@
-import { Request, Response, NextFunction } from 'express';
+import winston from "winston";
 
-export function errorMiddleware(err: any, req: Request, res: Response, next: NextFunction) {
-    console.error(err.stack);
-    res.status(500).send({ message: 'Internal Server Error' });
-}
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.combine(
+      winston.format.timestamp(),
+      winston.format.json()
+    ),
+    
+    transports: [
+      new winston.transports.Console(),
+      new winston.transports.File({ filename: 'logs/app.log' })
+    ]
+  });
+
+export default logger;
