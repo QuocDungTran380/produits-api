@@ -1,7 +1,9 @@
 import { User } from "../interfaces/user.interface";
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs'; 
 import { config } from '../utils/config';
+import { JWT_SECRET } from "../utils/jwt.utils";
 
 export class UserService {
 
@@ -19,11 +21,12 @@ export class UserService {
         const usersList = this.getData();
         const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
         if (emailRegex.test(email) && !usersList.find(u => u.email == email)) {
+            const hashedPassword = await bcrypt.hash(password, 10);
             const newUser: User = {
                 id: Math.floor(Math.random() * 100),
                 email,
-                password,
-                perms: 2
+                password: hashedPassword,
+                role: "employee"
             }
             usersList.push(newUser);
             this.writeData(usersList);
@@ -38,8 +41,8 @@ export class UserService {
         const foundUser = usersList.find(u => {
             return u.email == email
         });
-        if (foundUser && password == foundUser.password) {
-            return jwt.sign({email: email, accountType: foundUser.perms}, config.jwtSecret);
+        if (foundUser && await bcrypt.compare(password, foundUser.password)) {
+            return jwt.sign({email, accountType: foundUser.role}, JWT_SECRET, { expiresIn: '1h' });
 
         } else {
             return null;

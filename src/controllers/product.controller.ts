@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ProductService } from "../services/product.service";
+import logger from "../middlewares/error.middleware";
 
 export class ProductController {
     public async getAllProducts(req: Request, res: Response): Promise<void> {
@@ -14,10 +15,14 @@ export class ProductController {
         if (priceRegex.test(req.query.minPrice as string) && priceRegex.test(req.query.maxPrice as string)) {
             const minPrice = parseFloat(req.query.minPrice as string);
             const maxPrice = parseFloat(req.query.maxPrice as string);
-            productsList = await ProductService.getProductsByPrice(minPrice, maxPrice);
-            res.status(200).json(productsList);
+            if (maxPrice > minPrice) {
+                productsList = await ProductService.getProductsByPrice(minPrice, maxPrice);
+                res.status(200).json(productsList);
+            } else {
+                res.status(400).json({ error: "Invalid request" });
+            }
         } else {
-            res.status(400).json({ message: "Requête invalide" });
+            res.status(400).json({ error: "Invalid request" });
         }
     }
 
@@ -30,7 +35,7 @@ export class ProductController {
             productsList = await ProductService.getProductsByStock(minStock, maxStock);
             res.status(200).json(productsList);
         } else {
-            res.status(400).json({ message: "Requête invalide" });
+            res.status(400).json({ error: "Invalid request" });
         }
     }
 
@@ -44,13 +49,14 @@ export class ProductController {
             try {
                 await ProductService.addProduct(title, description, category, quantity, price).then((result) => {
                     if (result == 1) {
-                        res.status(201).json({ message: "Produit ajouté" });
+                        logger.info("New product added");
+                        res.status(201).json({ message: "Product added successfully" });
                     } else {
-                        res.status(400).json({ message: "Requête invalide" });
+                        res.status(400).json({ error: "Invalid request" });
                     }
                 });
             } catch {
-                res.status(400).json({ message: "Requête invalide" });
+                res.status(400).json({ error: "Invalid request" });
             }
         }
     }
@@ -70,15 +76,16 @@ export class ProductController {
             if (quantityRegex.test(id.toString()) && titleRegex.test(title) && descriptionRegex.test(description) && quantityRegex.test(quantity.toString()) && priceRegex.test(price.toString())) {
                 await ProductService.modifyProduct(id, title, description, quantity, price).then((result) => {
                     if (result == 1) {
-                        res.status(200).json({ message: "Produit modifié" });
+                        logger.info(`Product ${id} changed`);
+                        res.status(200).json({ message: "Product changed successfully" });
                     } else if (result == 0) {
-                        res.status(404).json({ messsage: "Produit non trouvé" });
+                        res.status(404).json({ error: "Product not found" });
                     } else {
-                        res.status(400).json({ message: "Erreur" });
+                        res.status(400).json({ error: "Invalid request" });
                     }
                 })
             } else {
-                res.status(400).json({ message: "Requête invalide" });
+                res.status(400).json({ message: "Invalid request" });
             }
         }
     }
@@ -89,13 +96,14 @@ export class ProductController {
             if (!isNaN(id)) {
                 await ProductService.deleteProduct(id).then((result) => {
                     if (result == 1) {
-                        res.status(204).json({ message: "Produit supprimé" });
+                        logger.info(`Product ${id} deleted`);
+                        res.status(204).json({ message: "Product deleted successfully" });
                     } else if (result == 0) {
-                        res.status(404).json({ message: "Produit non trouvé" });
+                        res.status(404).json({ error: "Product not found" });
                     }
                 });
             } else {
-                res.status(400).json({ message: "Requête invalide" });
+                res.status(400).json({ error: "Invalid request" });
             }
         }
     }

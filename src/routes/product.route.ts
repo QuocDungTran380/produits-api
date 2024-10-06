@@ -1,10 +1,86 @@
 import express, { Router } from "express";
 import { Request, Response } from "express";
 import { ProductController } from "../controllers/product.controller";
+import { verifyToken } from "../middlewares/auth.middleware";
+import { roleMiddleware } from "../middlewares/roles.middleware";
 
 const productsRoute = Router();
 
 const productsController = new ProductController();
+
+ /**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *       description: Enter your access token here
+ * security:
+ *   - bearerAuth: []
+ */
+ 
+/**
+ * @swagger
+ * /products:
+ *   get:
+ *     summary: Show all products.
+ *     description: Allow users to view all products. If the user is an admin, they can add, modify or delete a product.
+ *     parameters:
+ *       - in: query
+ *         name: minPrice
+ *         schema:
+ *           type: number
+ *           format: float
+ *         description: Minimum price of the product
+ *       - in: query
+ *         name: maxPrice
+ *         schema:
+ *           type: number
+ *           format: float
+ *         description: Maximum price of the product
+ *       - in: query
+ *         name: minStock
+ *         schema:
+ *           type: integer
+ *         description: Minimum stock of the product
+ *       - in: query
+ *         name: maxStock
+ *         schema:
+ *           type: integer
+ *         description: Maximum stock of the product
+ *     responses:
+ *       200:
+ *         description: A list of products.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                  id:
+ *                     type: integer
+ *                     example: 1
+ *                  title:
+ *                     type: string
+ *                     example: Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops
+ *                  description:
+ *                     type: string
+ *                     example: Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday
+ *                  category:
+ *                     type: string
+ *                     example: men's clothing
+ *                  quantity:
+ *                     type: integer
+ *                     example: 23
+ *                  price:
+ *                     type: float
+ *                     example: 109.50
+ *       400:
+ *         description: Invalid request.
+ */
 
 // GET - Récupérer tous les livres
 productsRoute.get("/", (req: Request, res: Response) => {
@@ -17,8 +93,128 @@ productsRoute.get("/", (req: Request, res: Response) => {
     }
 });
 
-productsRoute.post("/", productsController.addProduct);
-productsRoute.put("/:id", productsController.modifyProduct);
-productsRoute.delete("/:id", productsController.deleteProduct);
+/**
+ * @swagger
+ * /products:
+ *   post:
+ *     summary: Add a new product
+ *     description: Add a new product to the database.
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *        application/json:
+ *         schema:
+ *           type: object
+ *           properties:
+ *             title:
+ *               type: string
+ *               example: pommes
+ *             description:
+ *               type: string
+ *               example: gala
+ *             category:
+ *               type: string
+ *               example: fruits
+ *             quantity:
+ *               type: integer
+ *               example: 23
+ *             price:
+ *               type: float
+ *               example: 2.50
+ * 
+ *     responses:
+ *       201:
+ *         description: Product added successfully.
+ *       400:
+ *         description: Invalid request.
+ *       401:
+ *         description: Access refused.
+ *       403:
+ *         description: Action non-authorized.
+ * 
+ */
+
+productsRoute.post("/", verifyToken, roleMiddleware(["admin"]), productsController.addProduct);
+
+/**
+ * @swagger
+ * /products/{id}:
+ *   put:
+ *     summary: Modify a product
+ *     description: Modify a product from the database with an id and new values.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: number
+ *           format: integer
+ *         description: Id of the product to modify
+  *     requestBody:
+ *       required: true
+ *       content:
+ *        application/json:
+ *         schema:
+ *           type: object
+ *           properties:
+ *             title:
+ *               type: string
+ *               example: pommes
+ *             description:
+ *               type: string
+ *               example: gala
+ *             quantity:
+ *               type: integer
+ *               example: 23
+ *             price:
+ *               type: float
+ *               example: 2.50
+ *     responses:
+ *       200:
+ *         description: Product changed successfully.
+ *       400:
+ *         description: Invalid request.
+ *       401:
+ *         description: Access refused.
+ *       403:
+ *         description: Action non-authorized
+ *       404:
+ *         description: Product not found.
+ */
+
+productsRoute.put("/:id", verifyToken, roleMiddleware(["admin"]), productsController.modifyProduct);
+
+/**
+ * @swagger
+ * /products/{id}:
+ *   delete:
+ *     summary: Delete a product
+ *     description: Delete a product from the database with an id
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: number
+ *           format: integer
+ *         description: Id of the product to delete
+ *     responses:
+ *       204:
+ *         description: Product deleted successfully.
+ *       400:
+ *         description: Invalid request.
+ *       401:
+ *         description: Access refused.
+ *       403:
+ *         description: Action non-authorized.
+ *       404:
+ *         description: Product not found.
+ */
+
+productsRoute.delete("/:id", verifyToken, roleMiddleware(["admin"]), productsController.deleteProduct);
 
 export {productsRoute};

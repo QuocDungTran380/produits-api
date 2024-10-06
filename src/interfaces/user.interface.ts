@@ -2,5 +2,5 @@ export interface User {
     id: number,
     email: string,
     password: string,
-    perms: number
+    role: string
 }
