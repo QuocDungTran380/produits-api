@@ -4,13 +4,13 @@ import fs from "fs";
 export class ProductService {
 
     private static getData(): Product[] {
-        const data = fs.readFileSync("products.json", "utf-8");
+        const data = fs.readFileSync("./database/products.json", "utf-8");
         return JSON.parse(data);
     }
 
     private static writeData(productsList: Product[]): void {
         const productsToWrite = JSON.stringify(productsList, null, 4);
-        fs.writeFileSync("products.json", productsToWrite);
+        fs.writeFileSync("./database/products.json", productsToWrite);
     }
 
     public static async getAllProducts(): Promise<Product[]> {

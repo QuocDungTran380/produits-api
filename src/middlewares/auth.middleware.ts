@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from "../utils/jwt.utils";
-import logger from './error.middleware';
+import {errorLogger, warnLogger } from './logger.middleware';
 
 // Middleware pour vérifier le JWT
 export const verifyToken = (req: Request, res: Response, next: NextFunction): any => {
   const authHeaders = req.headers['authorization'];
   if (!authHeaders) {
-    logger.warn('Access refused');
+    warnLogger.warn('Access refused');
     return res.status(401).json({ message: 'Access refused' });
   }
 
@@ -17,7 +17,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): an
     req.body.user = decoded;
     next();
   } catch (error) {
-    logger.warn('Access refused');
+    warnLogger.warn('Access refused');
     res.status(401).json({ message: 'Access refused' });
   }
 };

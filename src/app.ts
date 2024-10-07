@@ -16,9 +16,9 @@ const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'User API',
+      title: 'Products API',
       version: '1.0.0',
-      description: 'A simple API to manage users',
+      description: 'An API to manage products and users',
     },
   },
   apis: ['./src/routes/*.route.ts'],

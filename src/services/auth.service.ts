@@ -8,13 +8,13 @@ import { JWT_SECRET } from "../utils/jwt.utils";
 export class UserService {
 
     private static getData(): User[] {
-        const data = fs.readFileSync("users.json", "utf-8");
+        const data = fs.readFileSync("./database/users.json", "utf-8");
         return JSON.parse(data);
     }
 
     private static writeData(usersList: User[]): void {
         const usersToWrite = JSON.stringify(usersList, null, 4);
-        fs.writeFileSync("users.json", usersToWrite);
+        fs.writeFileSync("./database/users.json", usersToWrite);
     }
 
     public static async registerUser(email: string, password: string): Promise<number> {
@@ -43,7 +43,6 @@ export class UserService {
         });
         if (foundUser && await bcrypt.compare(password, foundUser.password)) {
             return jwt.sign({email, accountType: foundUser.role}, JWT_SECRET, { expiresIn: '1h' });
-
         } else {
             return null;
         }

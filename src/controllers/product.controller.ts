@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ProductService } from "../services/product.service";
-import logger from "../middlewares/error.middleware";
+import {errorLogger, infoLogger, warnLogger } from "../middlewares/logger.middleware";
 
 export class ProductController {
     public async getAllProducts(req: Request, res: Response): Promise<void> {
@@ -35,6 +35,7 @@ export class ProductController {
             productsList = await ProductService.getProductsByStock(minStock, maxStock);
             res.status(200).json(productsList);
         } else {
+            errorLogger.error("Invalid request");
             res.status(400).json({ error: "Invalid request" });
         }
     }
@@ -49,13 +50,15 @@ export class ProductController {
             try {
                 await ProductService.addProduct(title, description, category, quantity, price).then((result) => {
                     if (result == 1) {
-                        logger.info("New product added");
+                        infoLogger.info("New product added");
                         res.status(201).json({ message: "Product added successfully" });
                     } else {
+                        errorLogger.error("Error adding product");
                         res.status(400).json({ error: "Invalid request" });
                     }
                 });
             } catch {
+                errorLogger.error("Error adding product");
                 res.status(400).json({ error: "Invalid request" });
             }
         }
@@ -76,15 +79,17 @@ export class ProductController {
             if (quantityRegex.test(id.toString()) && titleRegex.test(title) && descriptionRegex.test(description) && quantityRegex.test(quantity.toString()) && priceRegex.test(price.toString())) {
                 await ProductService.modifyProduct(id, title, description, quantity, price).then((result) => {
                     if (result == 1) {
-                        logger.info(`Product ${id} changed`);
+                        infoLogger.info(`Product ${id} changed`);
                         res.status(200).json({ message: "Product changed successfully" });
                     } else if (result == 0) {
                         res.status(404).json({ error: "Product not found" });
                     } else {
+                        errorLogger.error("Error changing product");
                         res.status(400).json({ error: "Invalid request" });
                     }
                 })
             } else {
+                errorLogger.error("Error changing product");
                 res.status(400).json({ message: "Invalid request" });
             }
         }
@@ -96,13 +101,14 @@ export class ProductController {
             if (!isNaN(id)) {
                 await ProductService.deleteProduct(id).then((result) => {
                     if (result == 1) {
-                        logger.info(`Product ${id} deleted`);
+                        infoLogger.info(`Product ${id} deleted`);
                         res.status(204).json({ message: "Product deleted successfully" });
                     } else if (result == 0) {
                         res.status(404).json({ error: "Product not found" });
                     }
                 });
             } else {
+                errorLogger.error("Error deleting product");
                 res.status(400).json({ error: "Invalid request" });
             }
         }

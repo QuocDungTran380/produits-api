@@ -26,7 +26,9 @@ const productsController = new ProductController();
  * /products:
  *   get:
  *     summary: Show all products.
- *     description: Allow users to view all products. If the user is an admin, they can add, modify or delete a product.
+ *     description: Allow users to view all products. If the user is an admin, they can add, modify or delete a product. The user can also filter products by price or stock (CANNOT filter both at once)
+ *     tags:
+ *      - Products
  *     parameters:
  *       - in: query
  *         name: minPrice
@@ -80,6 +82,14 @@ const productsController = new ProductController();
  *                     example: 109.50
  *       400:
  *         description: Invalid request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Invalid request
  */
 
 // GET - Récupérer tous les livres
@@ -99,6 +109,8 @@ productsRoute.get("/", (req: Request, res: Response) => {
  *   post:
  *     summary: Add a new product
  *     description: Add a new product to the database.
+ *     tags:
+ *      - Products
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -127,13 +139,44 @@ productsRoute.get("/", (req: Request, res: Response) => {
  *     responses:
  *       201:
  *         description: Product added successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Product added successfully
  *       400:
  *         description: Invalid request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Invalid request
  *       401:
- *         description: Access refused.
+ *         description: Access refused. Occurs when a user is not logged in (no token)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Access refused
  *       403:
- *         description: Action non-authorized.
- * 
+ *         description: Action non-authorized. Occurs when a employee tries to perform an action only reserved for an admin.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Action non-authorized
  */
 
 productsRoute.post("/", verifyToken, roleMiddleware(["admin"]), productsController.addProduct);
@@ -144,6 +187,8 @@ productsRoute.post("/", verifyToken, roleMiddleware(["admin"]), productsControll
  *   put:
  *     summary: Modify a product
  *     description: Modify a product from the database with an id and new values.
+ *     tags:
+ *      - Products
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -175,14 +220,54 @@ productsRoute.post("/", verifyToken, roleMiddleware(["admin"]), productsControll
  *     responses:
  *       200:
  *         description: Product changed successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Product changed successfully
  *       400:
  *         description: Invalid request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Invalid request
  *       401:
- *         description: Access refused.
+ *         description: Access refused. Occurs when a user is not logged in (no token)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Access refused
  *       403:
- *         description: Action non-authorized
+ *         description: Action non-authorized. Occurs when a employee tries to perform an action only reserved for an admin.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Access non-authorized
  *       404:
- *         description: Product not found.
+ *         description: Product not found. The provided id is not found in the database
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Product not found
  */
 
 productsRoute.put("/:id", verifyToken, roleMiddleware(["admin"]), productsController.modifyProduct);
@@ -193,6 +278,8 @@ productsRoute.put("/:id", verifyToken, roleMiddleware(["admin"]), productsContro
  *   delete:
  *     summary: Delete a product
  *     description: Delete a product from the database with an id
+ *     tags:
+ *      - Products
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -205,14 +292,54 @@ productsRoute.put("/:id", verifyToken, roleMiddleware(["admin"]), productsContro
  *     responses:
  *       204:
  *         description: Product deleted successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Product deleted successfully
  *       400:
  *         description: Invalid request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Invalid request
  *       401:
- *         description: Access refused.
+ *         description: Access refused. Occurs when a user is not logged in (no token)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Access refused
  *       403:
- *         description: Action non-authorized.
+ *         description: Action non-authorized. Occurs when a employee tries to perform an action only reserved for an admin.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Access non-authorized
  *       404:
- *         description: Product not found.
+ *         description: Product not found. The provided id is not found in the database
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Product not found
  */
 
 productsRoute.delete("/:id", verifyToken, roleMiddleware(["admin"]), productsController.deleteProduct);
