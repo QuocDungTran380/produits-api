@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
+import { errorLogger, infoLogger } from "../middlewares/logger.middleware";
 import { ProductService } from "../services/product.service";
-import {errorLogger, infoLogger, warnLogger } from "../middlewares/logger.middleware";
 
 export class ProductController {
     public async getAllProducts(req: Request, res: Response): Promise<void> {
@@ -9,33 +9,23 @@ export class ProductController {
         res.status(200).json(productsList);
     }
 
-    public async filterProductByPrice(req: Request, res: Response): Promise<void> {
-        var productsList;
-        const priceRegex = /^\d+(.\d{1,2})?$/;
-        if (priceRegex.test(req.query.minPrice as string) && priceRegex.test(req.query.maxPrice as string)) {
-            const minPrice = parseFloat(req.query.minPrice as string);
-            const maxPrice = parseFloat(req.query.maxPrice as string);
-            if (maxPrice > minPrice) {
-                productsList = await ProductService.getProductsByPrice(minPrice, maxPrice);
-                res.status(200).json(productsList);
-            } else {
+    public async filterProducts(req: Request, res: Response): Promise<void> {
+        try {
+            const minPrice = req.query.minPrice ? parseFloat(req.query.minPrice as string) : undefined;
+            const maxPrice = req.query.maxPrice ? parseFloat(req.query.maxPrice as string) : undefined;
+            const minStock = req.query.minStock ? parseFloat(req.query.minStock as string) : undefined;
+            const maxStock = req.query.maxStock ? parseFloat(req.query.maxStock as string) : undefined;
+            const productsList = await ProductService.filterProducts(minPrice, maxPrice, minStock, maxStock);
+            if (productsList == null) {
+                errorLogger.error("Invalid request");
                 res.status(400).json({ error: "Invalid request" });
+            } else if (productsList.length == 0) {
+                res.status(404).json({ message: "No products found" });
+            } else if (productsList.length > 0) {
+                res.status(200).json(productsList);
             }
-        } else {
-            res.status(400).json({ error: "Invalid request" });
-        }
-    }
-
-    public async filterProductByStock(req: Request, res: Response): Promise<void> {
-        var productsList;
-        const quantityRegex = /^\d+$/;
-        if (quantityRegex.test(req.query.minStock as string) && quantityRegex.test(req.query.maxStock as string)) {
-            const minStock = parseInt(req.query.minStock as string);
-            const maxStock = parseInt(req.query.maxStock as string);
-            productsList = await ProductService.getProductsByStock(minStock, maxStock);
-            res.status(200).json(productsList);
-        } else {
-            errorLogger.error("Invalid request");
+        } catch {
+            errorLogger.error("Error filtering products");
             res.status(400).json({ error: "Invalid request" });
         }
     }

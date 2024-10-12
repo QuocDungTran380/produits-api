@@ -39,6 +39,9 @@ const userController = new UserController();
  *                 token:
  *                   type: string
  *                   example: "[Access token]"
+ *                 role:
+ *                   type: string
+ *                   example: "admin"
  *       401:
  *         description: Email or password invalid. User have entered the wrong email or password combination
  *         content:
@@ -102,4 +105,4 @@ userRoute.post("/login", userController.loginUser);
 userRoute.post("/register", userController.registerUser);
 userRoute.get("/admin", verifyToken, roleMiddleware(["admin"]), userController.getAdminData);
 
-export {userRoute};
+export { userRoute };

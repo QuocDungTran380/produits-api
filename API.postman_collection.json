@@ -214,49 +214,6 @@
 					"response": []
 				},
 				{
-					"name": "Product not found error",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Product not found\", function () {\r",
-									"    pm.response.to.have.status(404);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"title\": \"pommes\",\r\n  \"description\": \"gala\",\r\n  \"quantity\": 23,\r\n  \"price\": 2.5\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://localhost:3000/products/2392",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"products",
-								"2392"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Delete product",
 					"event": [
 						{
@@ -296,7 +253,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImFjY291bnRUeXBlIjoiYWRtaW4iLCJpYXQiOjE3MjgyNzY2NzMsImV4cCI6MTcyODI4MDI3M30.mB0_nR_V8yX4cJfwbxLQOEKsfNHt-0VU-1_gJ2L317g",
+						"value": "{{ACCESS_TOKEN}}",
 						"type": "string"
 					}
 				]
@@ -500,6 +457,12 @@
 					"response": []
 				}
 			]
+		}
+	],
+	"variable": [
+		{
+			"key": "ACCESS_TOKEN",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImFjY291bnRUeXBlIjoiYWRtaW4iLCJpYXQiOjE3MjgzMTE3MzUsImV4cCI6MTcyODMxNTMzNX0.oxisd2e3xmd0Wfrc5z9b11mKBTOs9is-qVb8aZT2izY"
 		}
 	]
 }

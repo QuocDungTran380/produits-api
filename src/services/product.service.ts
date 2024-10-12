@@ -1,5 +1,5 @@
-import { Product } from "../interfaces/product.interface";
 import fs from "fs";
+import { Product } from "../interfaces/product.interface";
 
 export class ProductService {
 
@@ -15,6 +15,46 @@ export class ProductService {
 
     public static async getAllProducts(): Promise<Product[]> {
         return this.getData();
+    }
+
+    public static async filterProducts(minPrice?: number, maxPrice?: number, minStock?: number, maxStock?: number): Promise<any> {
+        var productsList = this.getData();
+        const priceRegex = /^\d+(.\d{1,2})?$/;
+        const quantityRegex = /^\d+$/;
+        if (minPrice) {
+            if (minPrice && maxPrice) {
+                if (priceRegex.test(minPrice.toString()) && priceRegex.test(maxPrice.toString())) {
+                    if (maxPrice > minPrice) {
+                        productsList = productsList.filter(function (i, n) {
+                            return i.price >= minPrice && i.price <= maxPrice;
+                        })
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } if (minStock) {
+            if (minStock && maxStock) {
+                if (quantityRegex.test(minStock.toString()) && quantityRegex.test(maxStock.toString())) {
+                    if (maxStock > minStock) {
+                        productsList = productsList.filter(function (i, n) {
+                            return i.quantity >= minStock && i.quantity <= maxStock;
+                        })
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        }
+        return productsList;
     }
 
     public static async getProductsByPrice(minPrice: number, maxPrice: number): Promise<Product[]> {
@@ -75,7 +115,8 @@ export class ProductService {
         const productsList = this.getData();
         const quantityRegex = /^\d+$/;
         let deleteSuccess = false;
-        if (quantityRegex.test(id.toString())) {;
+        if (quantityRegex.test(id.toString())) {
+            ;
             for (let i = 0; i < productsList.length; i++) {
                 if (productsList.at(i)?.id === id) {
                     productsList.splice(i, 1);;

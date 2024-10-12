@@ -1,9 +1,8 @@
-import { User } from "../interfaces/user.interface";
+import bcrypt from 'bcryptjs';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs'; 
+import { User } from "../interfaces/user.interface";
 import { config } from '../utils/config';
-import { JWT_SECRET } from "../utils/jwt.utils";
 
 export class UserService {
 
@@ -42,7 +41,8 @@ export class UserService {
             return u.email == email
         });
         if (foundUser && await bcrypt.compare(password, foundUser.password)) {
-            return jwt.sign({email, accountType: foundUser.role}, JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({email, accountType: foundUser.role}, config.JWT_SECRET, { expiresIn: '1h' });
+            return {token, role: foundUser.role};
         } else {
             return null;
         }

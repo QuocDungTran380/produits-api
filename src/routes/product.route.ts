@@ -1,5 +1,4 @@
-import express, { Router } from "express";
-import { Request, Response } from "express";
+import { Request, Response, Router } from "express";
 import { ProductController } from "../controllers/product.controller";
 import { verifyToken } from "../middlewares/auth.middleware";
 import { roleMiddleware } from "../middlewares/roles.middleware";
@@ -25,8 +24,8 @@ const productsController = new ProductController();
  * @swagger
  * /products:
  *   get:
- *     summary: Show all products.
- *     description: Allow users to view all products. If the user is an admin, they can add, modify or delete a product. The user can also filter products by price or stock (CANNOT filter both at once)
+ *     summary: Display products.
+ *     description: Allow users to view all products or filter them by price or stock
  *     tags:
  *      - Products
  *     parameters:
@@ -94,10 +93,8 @@ const productsController = new ProductController();
 
 // GET - Récupérer tous les livres
 productsRoute.get("/", (req: Request, res: Response) => {
-    if (req.query.minPrice && req.query.maxPrice) {
-        productsController.filterProductByPrice(req, res);
-    } else if (req.query.minStock && req.query.minStock) {
-        productsController.filterProductByStock(req, res);
+    if ((req.query.minPrice && req.query.maxPrice) || (req.query.minStock && req.query.maxStock)) {
+        productsController.filterProducts(req, res);
     } else {
         productsController.getAllProducts(req, res);
     }
@@ -344,4 +341,4 @@ productsRoute.put("/:id", verifyToken, roleMiddleware(["admin"]), productsContro
 
 productsRoute.delete("/:id", verifyToken, roleMiddleware(["admin"]), productsController.deleteProduct);
 
-export {productsRoute};
+export { productsRoute };

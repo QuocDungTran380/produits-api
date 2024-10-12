@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import {errorLogger, warnLogger } from './logger.middleware';
+import { NextFunction, Request, Response } from 'express';
+import { warnLogger } from './logger.middleware';
 
 export function roleMiddleware(roles: string[]): any {
   return (req: Request, res: Response, next: NextFunction) => {

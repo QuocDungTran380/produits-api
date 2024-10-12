@@ -1,10 +1,10 @@
-import express, { NextFunction, Request, Response } from 'express';
-import { productsRoute } from './routes/product.route';
-import { userRoute } from './routes/user.route';
-import { loadCertificate } from './middlewares/certificat.middleware';
+import express, { Request, Response } from 'express';
 import https from 'https';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import { loadCertificate } from './middlewares/certificat.middleware';
+import { productsRoute } from './routes/product.route';
+import { userRoute } from './routes/user.route';
 
 const app = express();
 

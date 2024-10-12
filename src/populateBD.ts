@@ -1,5 +1,5 @@
-import fs from "fs";
 import bcrypt from "bcryptjs";
+import fs from "fs";
 import { Product } from "./interfaces/product.interface";
 import { User } from "./interfaces/user.interface";
 
