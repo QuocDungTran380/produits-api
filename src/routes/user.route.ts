@@ -9,7 +9,7 @@ const userController = new UserController();
 
 /**
  * @swagger
- * /users/login:
+ * /v1/users/login:
  *   post:
  *     summary: Allow users to log in or register
  *     description: Allow users to log in and stores an access token in the header
@@ -60,7 +60,7 @@ userRoute.post("/login", userController.loginUser);
 
 /**
  * @swagger
- * /users/register:
+ * /v1/users/register:
  *   post:
  *     summary: Register a new user
  *     description: Allow a new user to register as a employee.

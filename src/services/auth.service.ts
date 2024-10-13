@@ -36,13 +36,17 @@ export class UserService {
     }
 
     public static async loginUser(email: string, password: string): Promise<any> {
+        const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+        if (!emailRegex.test(email)) {
+            return null;
+        }
         const usersList = this.getData();
         const foundUser = usersList.find(u => {
             return u.email == email
         });
         if (foundUser && await bcrypt.compare(password, foundUser.password)) {
-            const token = jwt.sign({email, accountType: foundUser.role}, config.JWT_SECRET, { expiresIn: '1h' });
-            return {token, role: foundUser.role};
+            const token = jwt.sign({ email, accountType: foundUser.role }, config.JWT_SECRET, { expiresIn: '1h' });
+            return { token, role: foundUser.role };
         } else {
             return null;
         }

@@ -24,7 +24,7 @@ export class UserController {
             const email = req.body.email;
             const password = req.body.password;
             await UserService.loginUser(email, password).then((data) => {
-                if (data.token) {
+                if (data) {
                     if (data.role == "admin") {
                         infoLogger.info(`User with email ${email} logged in successfully as admin`);
                     } else if (data.role == "employe") {
