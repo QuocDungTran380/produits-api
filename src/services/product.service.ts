@@ -1,40 +1,72 @@
-import { Product } from "../interfaces/product.interface";
 import fs from "fs";
+import { Product } from "../interfaces/product.interface";
 
 export class ProductService {
 
     private static getData(): Product[] {
-        const data = fs.readFileSync("products.json", "utf-8");
+        const data = fs.readFileSync("./database/products.json", "utf-8");
         return JSON.parse(data);
     }
 
     private static writeData(productsList: Product[]): void {
         const productsToWrite = JSON.stringify(productsList, null, 4);
-        fs.writeFileSync("products.json", productsToWrite);
+        fs.writeFileSync("./database/products.json", productsToWrite);
     }
 
-    public static async getAllProducts(): Promise<Product[]> {
-        return this.getData();
-    }
-
-    public static async getProductsByPrice(minPrice: number, maxPrice: number): Promise<Product[]> {
-        const productsList = this.getData();
-        const filteredProducts = productsList.filter(function (i, n) {
-            return i.price >= minPrice && i.price <= maxPrice;
-        })
-        return filteredProducts;
-    }
-
-    public static async getProductsByStock(minStock: number, maxStock: number): Promise<Product[]> {
-        const productsList = this.getData();
-        const filteredProducts = productsList.filter(function (i, n) {
-            return i.quantity >= minStock && i.quantity <= maxStock;
-        })
-        return filteredProducts;
+    public static async filterProducts(minPrice?: number, maxPrice?: number, minStock?: number, maxStock?: number): Promise<any> {
+        var productsList = this.getData();
+        const priceRegex = /^\d+(.\d{1,2})?$/;
+        const quantityRegex = /^\d+$/;
+        if (minPrice || maxPrice) {
+            if (minPrice && maxPrice) {
+                if (priceRegex.test(minPrice.toString()) && priceRegex.test(maxPrice.toString())) {
+                    if (maxPrice > minPrice) {
+                        productsList = productsList.filter(function (i, n) {
+                            return i.price >= minPrice && i.price <= maxPrice;
+                        })
+                    } else return null;
+                } else return null;
+            } else if (minPrice) {
+                if (priceRegex.test(minPrice.toString())) {
+                    productsList = productsList.filter(function (i, n) {
+                        return i.price >= minPrice;
+                    })
+                } else return null;
+            } else if (maxPrice) {
+                console.log('test');
+                if (priceRegex.test(maxPrice.toString())) {
+                    productsList = productsList.filter(function (i, n) {
+                        return i.price <= maxPrice;
+                    })
+                }
+            } else return null;
+        } if (minStock || maxStock) {
+            if (minStock && maxStock) {
+                if (quantityRegex.test(minStock.toString()) && quantityRegex.test(maxStock.toString())) {
+                    if (maxStock > minStock) {
+                        productsList = productsList.filter(function (i, n) {
+                            return i.quantity >= minStock && i.quantity <= maxStock;
+                        })
+                    } else return null;
+                } else return null;
+            } else if (minStock) {
+                if (quantityRegex.test(minStock.toString())) {
+                    productsList = productsList.filter(function (i, n) {
+                        return i.quantity >= minStock;
+                    })
+                } else return null;
+            } else if (maxStock) {
+                if (quantityRegex.test(maxStock.toString())) {
+                    productsList = productsList.filter(function (i, n) {
+                        return i.quantity <= maxStock;
+                    })
+                } else return null;
+            }
+        }
+        return productsList;
     }
 
     public static async addProduct(title: string, description: string, category: string, quantity: number, price: number): Promise<number> {
-        ;
         const productsList = this.getData();
         const titleRegex = /^[a-zA-Z]{3,50}$/;
         const priceRegex = /^\d+(.\d{1,2})?$/;
@@ -51,9 +83,7 @@ export class ProductService {
             productsList.push(newProduct);
             this.writeData(productsList);
             return 1;
-        } else {
-            return 0;
-        }
+        } else return 0;
     }
     public static async modifyProduct(id: number, title?: string, description?: string, quantity?: number, price?: number): Promise<number> {
         const productsList = this.getData();
@@ -75,7 +105,7 @@ export class ProductService {
         const productsList = this.getData();
         const quantityRegex = /^\d+$/;
         let deleteSuccess = false;
-        if (quantityRegex.test(id.toString())) {;
+        if (quantityRegex.test(id.toString())) {
             for (let i = 0; i < productsList.length; i++) {
                 if (productsList.at(i)?.id === id) {
                     productsList.splice(i, 1);;

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
+import { errorLogger, infoLogger } from "../middlewares/logger.middleware";
 import { UserService } from "../services/auth.service";
-import logger from "../middlewares/error.middleware";
 
 export class UserController {
     public async registerUser(req: Request, res: Response) {
@@ -9,10 +9,11 @@ export class UserController {
             const password = req.body.password;
             await UserService.registerUser(email, password).then((result) => {
                 if (result == 1) {
-                    logger.info(`User with email ${email} registered successfully`);
+                    infoLogger.info(`User with email ${email} registered successfully`);
                     res.status(201).json({message: "User registered successfully"});
                 } else {
-                    res.status(400).json({error: "Email invalid"})
+                    errorLogger.error("Error registering user");
+                    res.status(400).json({error: "Email invalid/already exists"});
                 }
             })
         }
@@ -22,13 +23,17 @@ export class UserController {
         if (req.body.email && req.body.password) {
             const email = req.body.email;
             const password = req.body.password;
-            await UserService.loginUser(email, password).then((result) => {
-                if (result) {
-                    logger.info(`User with email ${email} logged in successfully`);
-                    res.setHeader('authorization', `Bearer ${result}`);
-                    res.status(200).json({token: result});
+            await UserService.loginUser(email, password).then((data) => {
+                if (data) {
+                    if (data.role == "admin") {
+                        infoLogger.info(`User with email ${email} logged in successfully as admin`);
+                    } else if (data.role == "employe") {
+                        infoLogger.info(`User with email ${email} logged in successfully as employee`);
+                    }
+                    res.setHeader('authorization', `Bearer ${data.token}`);
+                    res.status(200).json({token: data.token, role: data.role});
                 } else {
-                    logger.error("Email or password invalid");
+                    errorLogger.error("Attempt: email or password invalid");
                     res.status(401).json({error: "Email or password invalid"})
                 }
             })
@@ -36,7 +41,8 @@ export class UserController {
     }
 
     public async getAdminData(req: Request, res: Response) {
-        res.json({ message: 'Données réservées aux administrateurs.' });
+        infoLogger.info("Admin data accessed");
+        res.json({ message: 'Administrateur connecté: données réservées aux administrateurs.' });
     }
 
 }
