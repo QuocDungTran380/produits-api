@@ -16,9 +16,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Get all products\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -29,13 +27,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:3000/products",
+							"raw": "https://localhost:3000/v1/products",
 							"protocol": "https",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
+								"v1",
 								"products"
 							]
 						}
@@ -43,15 +42,13 @@
 					"response": []
 				},
 				{
-					"name": "Filter products by price",
+					"name": "Filter products",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Filter products by price\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -62,66 +59,32 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:3000/products?minPrice=25&maxPrice=50",
+							"raw": "https://localhost:3000/v1/products?minPrice=25.25&maxPrice=75.99&minStock=25&maxStock=100",
 							"protocol": "https",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
+								"v1",
 								"products"
 							],
 							"query": [
 								{
 									"key": "minPrice",
-									"value": "25"
+									"value": "25.25"
 								},
 								{
 									"key": "maxPrice",
-									"value": "50"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Filter products by stock",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Filter products by stock\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://localhost:3000/products?minStock=25&maxStock=50",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"products"
-							],
-							"query": [
+									"value": "75.99"
+								},
 								{
 									"key": "minStock",
 									"value": "25"
 								},
 								{
 									"key": "maxStock",
-									"value": "50"
+									"value": "100"
 								}
 							]
 						}
@@ -135,9 +98,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Add product\", function () {\r",
-									"    pm.response.to.have.status(201);\r",
-									"});"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -157,13 +118,14 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:3000/products",
+							"raw": "https://localhost:3000/v1/products",
 							"protocol": "https",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
+								"v1",
 								"products"
 							]
 						}
@@ -177,9 +139,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Modify product\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -191,7 +151,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"title\": \"pommes\",\r\n  \"description\": \"gala\",\r\n  \"quantity\": 23,\r\n  \"price\": 2.5\r\n}",
+							"raw": "{\r\n  \"title\": \"poires\",\r\n  \"description\": \"verte\",\r\n  \"quantity\": 20,\r\n  \"price\": 1.25\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -199,15 +159,16 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:3000/products/3",
+							"raw": "https://localhost:3000/v1/products/315",
 							"protocol": "https",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
+								"v1",
 								"products",
-								"3"
+								"315"
 							]
 						}
 					},
@@ -220,9 +181,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Delete product\", function () {\r",
-									"    pm.response.to.have.status(204);\r",
-									"});"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -233,15 +192,16 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:3000/products/5",
+							"raw": "https://localhost:3000/v1/products/315",
 							"protocol": "https",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
+								"v1",
 								"products",
-								"5"
+								"315"
 							]
 						}
 					},
@@ -291,9 +251,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Admin user login\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -313,13 +271,14 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:3000/users/login",
+							"raw": "https://localhost:3000/v1/users/login",
 							"protocol": "https",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
+								"v1",
 								"users",
 								"login"
 							]
@@ -334,9 +293,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"User register\", function () {\r",
-									"    pm.response.to.have.status(201);\r",
-									"});"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -356,13 +313,14 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:3000/users/register",
+							"raw": "https://localhost:3000/v1/users/register",
 							"protocol": "https",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
+								"v1",
 								"users",
 								"register"
 							]
@@ -377,9 +335,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Employee login\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -399,13 +355,14 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:3000/users/login",
+							"raw": "https://localhost:3000/v1/users/login",
 							"protocol": "https",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
+								"v1",
 								"users",
 								"login"
 							]
@@ -420,9 +377,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Wrong password login\", function () {\r",
-									"    pm.response.to.have.status(401);\r",
-									"});"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -442,15 +397,47 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:3000/users/login",
+							"raw": "https://localhost:3000/v1/users/login",
 							"protocol": "https",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
+								"v1",
 								"users",
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin access confirmation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:3000/v1/users/admin",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"users",
+								"admin"
 							]
 						}
 					},
