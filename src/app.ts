@@ -27,6 +27,10 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 
 // Route de base
+app.get('/', (req: Request, res: Response) => {
+  res.send('Connection successful!');
+});
+
 app.get('/v1/', (req: Request, res: Response) => {
   res.send('Hello, TypeScript with Express! Connexion sécurisé');
 });
