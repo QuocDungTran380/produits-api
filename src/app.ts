@@ -41,6 +41,6 @@ app.use("/v1/products", productsRoute);
 
 app.use("/v1/users", userRoute);
 
-const httpApp = https.createServer(certificatOptions, app);
+const httpApp =  app;
 
 export default httpApp;
