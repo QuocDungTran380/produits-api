@@ -5,6 +5,7 @@ import swaggerUi from 'swagger-ui-express';
 import { loadCertificate } from './middlewares/certificat.middleware';
 import { productsRoute } from './routes/product.route';
 import { userRoute } from './routes/user.route';
+import { config } from "./utils/config";
 
 const app = express();
 
@@ -40,7 +41,11 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use("/v1/products", productsRoute);
 
 app.use("/v1/users", userRoute);
-
-const httpApp =  app;
+const httpApp;
+if (config.ENV === "DEV") {
+  httpApp = https.createServer(certificatOptions, app);
+} else if (config.ENV === "PROD")  {
+  httpApp = app
+}
 
 export default httpApp;
