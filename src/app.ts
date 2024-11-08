@@ -41,7 +41,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use("/v1/products", productsRoute);
 
 app.use("/v1/users", userRoute);
-const httpApp;
+const httpApp: any;
 if (config.ENV === "DEV") {
   httpApp = https.createServer(certificatOptions, app);
 } else if (config.ENV === "PROD")  {
