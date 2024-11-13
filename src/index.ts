@@ -1,5 +1,4 @@
 import httpApp from './app';
-import { ConnectToMongoDB } from './mongoConnection';
 import { PopulateProducts, PopulateUsers } from './populateBD';
 import { config } from "./utils/config";
 
@@ -10,5 +9,5 @@ httpApp.listen(port, () => {
   console.log(`Serveur en écoute sur <https://localhost>:${port}`);
 });
 
-ConnectToMongoDB().then(() => PopulateProducts());
+PopulateProducts();
 PopulateUsers();
