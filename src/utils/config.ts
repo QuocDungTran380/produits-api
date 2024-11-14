@@ -8,4 +8,4 @@ export const config = {
   JWT_SECRET: process.env.JWT_SECRET || ""
 };
 
-export const productsCollection: { products?: mongoose.Collection } = {};
+// export const productsCollection: { products?: mongoose.Collection } = {};

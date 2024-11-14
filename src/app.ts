@@ -34,6 +34,7 @@ app.get('/v1/', (req: Request, res: Response) => {
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use("/v1/products", productsRoute);
+app.use("/v2/products", productsRoute);
 
 app.use("/v1/users", userRoute);
 
