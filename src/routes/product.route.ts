@@ -114,7 +114,7 @@ const productsController = new ProductController();
  */
 
 // GET - Récupérer les livres
-// productsRoute.get("/", verifyToken, roleMiddleware(["employe", "admin"]), productsController.getProducts);
+productsRoute.get("/", verifyToken, roleMiddleware(["employe", "admin"]), productsController.getProducts);
 /**
  * @swagger
  * /v1/products:
@@ -201,7 +201,7 @@ const productsController = new ProductController();
  *                   example: Internal server error
  */
 
-// productsRoute.post("/", verifyToken, roleMiddleware(["admin"]), productsController.addProduct);
+productsRoute.post("/", verifyToken, roleMiddleware(["admin"]), productsController.addProduct);
 
 /**
  * @swagger
@@ -302,7 +302,7 @@ const productsController = new ProductController();
  *                   example: Internal server error
  */
 
-// productsRoute.put("/:id", verifyToken, roleMiddleware(["admin"]), productsController.modifyProduct);
+productsRoute.put("/:id", verifyToken, roleMiddleware(["admin"]), productsController.modifyProduct);
 
 /**
  * @swagger
@@ -384,6 +384,6 @@ const productsController = new ProductController();
  *                   example: Internal server error
  */
 
-// productsRoute.delete("/:id", verifyToken, roleMiddleware(["admin"]), productsController.deleteProduct);
+productsRoute.delete("/:id", verifyToken, roleMiddleware(["admin"]), productsController.deleteProduct);
 
 export { productsRoute };

@@ -3,7 +3,7 @@ import { ConnectToMongoDB } from './mongoConnection';
 import { PopulateProducts, PopulateUsers } from './populateBD';
 import { config } from "./utils/config";
 
-const port = config.port;
+const port = config.PORT;
 
 // Démarrage du serveur
 httpApp.listen(port, () => {

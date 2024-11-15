@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
+import { ProductModel } from './product.model';
 
-const productSchema = new mongoose.Schema({
+const productSchema: mongoose.Schema = new mongoose.Schema({
     id: {
         type: Number,
         required: true
@@ -27,4 +28,4 @@ const productSchema = new mongoose.Schema({
     }
 })
 
-export const Product = mongoose.model("Product", productSchema, "products");
+export const Product = mongoose.model<ProductModel>("Product", productSchema, "products");

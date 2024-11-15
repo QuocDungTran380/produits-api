@@ -6,44 +6,55 @@ import fs from "fs";
 import mongoose from "mongoose";
 import { getProductsCollection } from "../mongoCollection";
 import { Product } from "../models/productSchema.model";
-import { Produit } from "../interfaces/product.interface";
+import { ProductModel } from "../models/product.model";
 
 export class ProductService {
 
-    private static getDataFromJson(): Produit[] {
-        const data = fs.readFileSync("./database/products.json", "utf-8");
-        return JSON.parse(data);
-    }
+    // private static getDataFromJson(): Produit[] {
+    //     const data = fs.readFileSync("./database/products.json", "utf-8");
+    //     return JSON.parse(data);
+    // }
 
-    private static async getDataFromMango(): Promise<Array<Produit>> {
+    // private static async getDataFromMango(): Promise<Array<Produit>> {
+    //     let productsList: any = [];
+    //     const collection = await getProductsCollection();
+    //     collection.find().map((p: any) => {
+    //         p = new Product({
+    //             id: p.id,
+    //             title: p.title,
+    //             description: p.description,
+    //             category: p.category,
+    //             quantity: p.quantity,
+    //             price: p.price
+    //         });
+    //         productsList.push(p);
+    //     });
+    //     return productsList;
+    // }
+    private static async getData(version: string): Promise<Array<ProductModel>> {
         let productsList: any = [];
-        const collection = await getProductsCollection();
-        collection.find().map((p: any) => {
-            p = new Product({
-                id: p.id,
-                title: p.title,
-                description: p.description,
-                category: p.category,
-                quantity: p.quantity,
-                price: p.price
-            });
-            productsList.push(p);
-        });
+        if (version === 'v1') {
+            const data = fs.readFileSync("./database/products.json", "utf-8");
+            productsList = JSON.parse(data);
+            console.log('fetched from v1')
+        } else if (version === 'v2') {
+            productsList = await getProductsCollection();
+            console.log('fetched from v2')
+        }
         return productsList;
     }
 
-    private static writeData(productsList: Produit[]): void {
-        const productsToWrite = JSON.stringify(productsList, null, 4);
-        fs.writeFileSync("./database/products.json", productsToWrite);
+    private static writeData(version: string, productsList: ProductModel[]): void {
+        if (version === 'v1') {
+            const productsToWrite = JSON.stringify(productsList, null, 4);
+            fs.writeFileSync("./database/products.json", productsToWrite);
+        } else if (version === 'v2') {
+            const collection = getProductsCollection(); // a faire
+        }
     }
 
     public static async filterProducts(version: string, minPrice?: number, maxPrice?: number, minStock?: number, maxStock?: number): Promise<any> {
-        let productsList;
-        if (version === '1') {
-            productsList = this.getDataFromJson();
-        } else if (version === '2') {
-            productsList = await this.getDataFromMango();
-        }
+        let productsList = await this.getData(version);
         if (productsList) {
             const priceRegex = /^\d+(.\d{1,2})?$/;
             const quantityRegex = /^\d+$/;
@@ -63,7 +74,6 @@ export class ProductService {
                         })
                     } else return null;
                 } else if (maxPrice) {
-                    console.log('test');
                     if (priceRegex.test(maxPrice.toString())) {
                         productsList = productsList.filter(function (i, n) {
                             return i.price <= maxPrice;
@@ -94,18 +104,14 @@ export class ProductService {
                 }
                 return productsList;
             }
+            return productsList;
         } else {
             return null;
         }
     }
 
     public static async addProduct(version: string, title: string, description: string, category: string, quantity: number, price: number): Promise<number> {
-        let productsList;
-        if (version === '1') {
-            productsList = this.getDataFromJson();
-        } else if (version === '2') {
-            productsList = await this.getDataFromMango();
-        }
+        const productsList = await this.getData(version);
         if (productsList) {
             const titleRegex = /^[a-zA-Z]{3,50}$/;
             const priceRegex = /^\d+(.\d{1,2})?$/;
@@ -119,48 +125,42 @@ export class ProductService {
                     quantity,
                     price
                 })
-                if (version === '1') {
-                    productsList.push(newProduct);
-                    this.writeData(productsList);
-                    return 1;
-                } else if (version === '2') {
-                    newProduct.save();
-                    return 1;
-                }
+                productsList.push(newProduct);
+                this.writeData(version, productsList);
+                return 1;
             } else return 0;
         } else return 0;
-        return 0;
     }
-    //     public static async modifyProduct(id: number, title?: string, description?: string, quantity?: number, price?: number): Promise<number> {
-    //         const productsList = this.getData();
-    //         let changeSuccess = false;
-    //         productsList.find(p => {
-    //             if (p.id === id) {
-    //                 p.title = title || p.title;
-    //                 p.description = description || p.description;
-    //                 p.quantity = quantity || p.quantity;
-    //                 p.price = price || p.price;
-    //                 this.writeData(productsList);
-    //                 changeSuccess = true;
-    //             }
-    //         });
-    //         return changeSuccess ? 1 : 0;
-    //     }
+    public static async modifyProduct(version: string, id: number, title?: string, description?: string, quantity?: number, price?: number): Promise<number> {
+        const productsList = await this.getData(version);
+        let changeSuccess = false;
+        productsList.find(p => {
+            if (p.id === id) {
+                p.title = title || p.title;
+                p.description = description || p.description;
+                p.quantity = quantity || p.quantity;
+                p.price = price || p.price;
+                this.writeData(version, productsList);
+                changeSuccess = true;
+            }
+        });
+        return changeSuccess ? 1 : 0;
+    }
 
-    //     public static async deleteProduct(id: number): Promise<number> {
-    //         const productsList = this.getData();
-    //         const quantityRegex = /^\d+$/;
-    //         let deleteSuccess = false;
-    //         if (quantityRegex.test(id.toString())) {
-    //             for (let i = 0; i < productsList.length; i++) {
-    //                 if (productsList.at(i)?.id === id) {
-    //                     productsList.splice(i, 1);;
-    //                     this.writeData(productsList);
-    //                     deleteSuccess = true;
-    //                     break;
-    //                 }
-    //             }
-    //         }
-    //         return deleteSuccess ? 1 : 0;
-    //     }
+    public static async deleteProduct(version: string, id: number): Promise<number> {
+        const productsList = await this.getData(version);
+        const quantityRegex = /^\d+$/;
+        let deleteSuccess = false;
+        if (quantityRegex.test(id.toString())) {
+            for (let i = 0; i < productsList.length; i++) {
+                if (productsList.at(i)?.id === id) {
+                    productsList.splice(i, 1);;
+                    this.writeData(version, productsList);
+                    deleteSuccess = true;
+                    break;
+                }
+            }
+        }
+        return deleteSuccess ? 1 : 0;
+    }
 }
