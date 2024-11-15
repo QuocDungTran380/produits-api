@@ -3,7 +3,7 @@ import fs from "fs";
 // import { Collection } from "mongoose";
 // import { collections } from "../utils/config";
 
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 import { getProductsCollection } from "../mongoCollection";
 import { Product } from "../models/productSchema.model";
 import { ProductModel } from "../models/product.model";
@@ -38,18 +38,29 @@ export class ProductService {
             productsList = JSON.parse(data);
             console.log('fetched from v1')
         } else if (version === 'v2') {
-            productsList = await getProductsCollection();
+            productsList = (await (await getProductsCollection()).find().toArray()).map((product) => {
+            return new ProductModel({
+                id: product.id,
+                title: product.title,
+                description: product.description,
+                category: product.category,
+                quantity: product.quantity,
+                price: product.price
+            })
+            });
             console.log('fetched from v2')
         }
         return productsList;
     }
 
-    private static writeData(version: string, productsList: ProductModel[]): void {
+    private static async writeData(version: string, productsList: ProductModel[]): Promise<void> {
         if (version === 'v1') {
             const productsToWrite = JSON.stringify(productsList, null, 4);
             fs.writeFileSync("./database/products.json", productsToWrite);
         } else if (version === 'v2') {
-            const collection = getProductsCollection(); // a faire
+            const collection = await getProductsCollection();
+            await collection.deleteMany({});
+            await collection.insertMany(productsList);
         }
     }
 
@@ -67,20 +78,28 @@ export class ProductService {
                             })
                         } else return null;
                     } else return null;
-                } else if (minPrice) {
+                } 
+                
+                else if (minPrice) {
                     if (priceRegex.test(minPrice.toString())) {
                         productsList = productsList.filter(function (i, n) {
                             return i.price >= minPrice;
                         })
                     } else return null;
-                } else if (maxPrice) {
+                } 
+                
+                else if (maxPrice) {
                     if (priceRegex.test(maxPrice.toString())) {
                         productsList = productsList.filter(function (i, n) {
                             return i.price <= maxPrice;
                         })
                     }
-                } else return null;
-            } if (minStock || maxStock) {
+                } 
+                
+                else return null;
+            } 
+            
+            if (minStock || maxStock) {
                 if (minStock && maxStock) {
                     if (quantityRegex.test(minStock.toString()) && quantityRegex.test(maxStock.toString())) {
                         if (maxStock > minStock) {
