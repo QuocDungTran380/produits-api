@@ -1,7 +1,8 @@
-import { Request, Response, Router } from "express";
+import { request, Request, Response, Router } from "express";
 import { ProductController } from "../controllers/product.controller";
 import { verifyToken } from "../middlewares/auth.middleware";
 import { roleMiddleware } from "../middlewares/roles.middleware";
+import { sqlInjectionDetector } from "../middlewares/sql.middleware";
 
 const productsRoute = Router();
 
@@ -114,7 +115,7 @@ const productsController = new ProductController();
  */
 
 // GET - Récupérer les livres
-productsRoute.get("/", verifyToken, roleMiddleware(["employe", "admin"]), productsController.getProducts);
+productsRoute.get("/", sqlInjectionDetector, verifyToken, roleMiddleware(["employe", "admin"]), productsController.getProducts);
 /**
  * @swagger
  * /v1/products:
@@ -201,7 +202,7 @@ productsRoute.get("/", verifyToken, roleMiddleware(["employe", "admin"]), produc
  *                   example: Internal server error
  */
 
-productsRoute.post("/", verifyToken, roleMiddleware(["admin"]), productsController.addProduct);
+productsRoute.post("/", sqlInjectionDetector, verifyToken, roleMiddleware(["admin"]), productsController.addProduct);
 
 /**
  * @swagger
@@ -302,7 +303,7 @@ productsRoute.post("/", verifyToken, roleMiddleware(["admin"]), productsControll
  *                   example: Internal server error
  */
 
-productsRoute.put("/:id", verifyToken, roleMiddleware(["admin"]), productsController.modifyProduct);
+productsRoute.put("/:id", sqlInjectionDetector, verifyToken, roleMiddleware(["admin"]), productsController.modifyProduct);
 
 /**
  * @swagger
@@ -384,6 +385,6 @@ productsRoute.put("/:id", verifyToken, roleMiddleware(["admin"]), productsContro
  *                   example: Internal server error
  */
 
-productsRoute.delete("/:id", verifyToken, roleMiddleware(["admin"]), productsController.deleteProduct);
+productsRoute.delete("/:id", sqlInjectionDetector, verifyToken, roleMiddleware(["admin"]), productsController.deleteProduct);
 
 export { productsRoute };

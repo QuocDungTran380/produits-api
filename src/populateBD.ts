@@ -2,49 +2,55 @@ import bcrypt from "bcryptjs";
 import fs from "fs";
 import { User } from "./interfaces/user.interface";
 import { Product } from "./models/productSchema.model";
+import { getProductsCollection } from "./mongoCollection";
+import { ProductModel } from "./models/product.model";
 
 async function hashPassword(password: string) {
     const hashedPassword = await bcrypt.hash(password, 10);
     return hashedPassword;
 }
 
-// export const PopulateProducts = () => {
-//     fetch('https://fakestoreapi.com/products')
-//     .then(res => res.json())
-//     .then(json => {
-//         const modifiedProducts = json.map((product: Product) => ({
-//             id: product.id,
-//             title: product.title,
-//             description: product.description,
-//             category: product.category,
-//             quantity: Math.floor(Math.random() * 100),
-//             price: product.price
-//         }))
-//         const products = JSON.stringify(modifiedProducts, null, 4);
-//         fs.writeFileSync('./database/products.json', products);
-//     })
-// }
+export const PopulateJSON = () => {
+    fetch('https://fakestoreapi.com/products')
+    .then(res => res.json())
+    .then(json => {
+        const modifiedProducts = json.map((product: ProductModel) => ({
+            id: product.id,
+            title: product.title,
+            description: product.description,
+            category: product.category,
+            quantity: Math.floor(Math.random() * 100),
+            price: product.price
+        }))
+        const products = JSON.stringify(modifiedProducts, null, 4);
+        fs.writeFileSync('./database/products.json', products);
+    })
+}
 
 export const PopulateProducts = () => {
-    fetch('https://fakestoreapi.com/products')
-        .then(res => res.json())
-        .then(json => {
-            try {
-                json.map((product: any) => {
-                    product = new Product({
-                        id: product.id,
-                        title: product.title,
-                        description: product.description,
-                        category: product.category,
-                        quantity: Math.floor(Math.random() * 100),
-                        price: product.price
+    getProductsCollection().then((collection) => collection.deleteMany({})).then(() => {
+        console.log("Collection cleared");
+        fetch('https://fakestoreapi.com/products')
+            .then(res => res.json())
+            .then(json => {
+                try {
+                    json.map((product: any) => {
+                        product = new Product({
+                            id: product.id,
+                            title: product.title,
+                            description: product.description,
+                            category: product.category,
+                            quantity: Math.floor(Math.random() * 100),
+                            price: product.price
+                        })
+
+                        product.save().then(() => console.log("Product fetched and saved to database"));
                     })
-                    product.save().then(() => console.log("Product fetched and saved to database"));
-                })
-            } catch (error) {
-                console.log("Error fetching products: ", error);
-            }
-        })
+                } catch (error) {
+                    console.log("Error fetching products: ", error);
+                }
+            })
+    })
 }
 
 export const PopulateUsers = () => {

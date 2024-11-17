@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8f4b9e46-6da6-48f1-96e3-a80c5a1cd47a",
+		"_postman_id": "578f332a-ae30-4ea8-80f7-7f23d84abea1",
 		"name": "API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "2326447"
@@ -355,14 +355,13 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:3000/v1/users/login",
+							"raw": "https://localhost:3000/users/login",
 							"protocol": "https",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"v1",
 								"users",
 								"login"
 							]

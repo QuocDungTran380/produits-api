@@ -28,7 +28,7 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 
 // Route de base
-app.get('/v1/', (req: Request, res: Response) => {
+app.get('/', (req: Request, res: Response) => {
   res.send('Hello, TypeScript with Express! Connexion sécurisé');
 });
 
@@ -37,7 +37,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use("/v1/products", productsRoute);
 app.use("/v2/products", productsRoute);
 
-app.use("/v1/users", userRoute);
+app.use("/users", userRoute);
 let httpApp: any;
 if (config.ENV === 'DEV') httpApp = https.createServer(certificatOptions, app);
 else if (config.ENV === 'PROD') httpApp = app;

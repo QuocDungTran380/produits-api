@@ -45,7 +45,7 @@ export class UserService {
             return u.email == email
         });
         if (foundUser && await bcrypt.compare(password, foundUser.password)) {
-            const token = jwt.sign({ email, accountType: foundUser.role }, config.JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ email, accountType: foundUser.role }, config.JWT_SECRET, { expiresIn: '20s' });
             return { token, role: foundUser.role };
         } else {
             return null;

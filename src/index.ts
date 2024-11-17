@@ -1,6 +1,6 @@
 import httpApp from './app';
 import { ConnectToMongoDB } from './mongoConnection';
-import { PopulateProducts, PopulateUsers } from './populateBD';
+import { PopulateJSON, PopulateProducts, PopulateUsers } from './populateBD';
 import { config } from "./utils/config";
 
 const port = config.PORT;
@@ -12,3 +12,4 @@ httpApp.listen(port, () => {
 
 ConnectToMongoDB().then(() => PopulateProducts());
 PopulateUsers();
+PopulateJSON();

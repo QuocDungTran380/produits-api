@@ -2,6 +2,7 @@ import { Router } from "express";
 import { UserController } from "../controllers/user.controller";
 import { verifyToken } from "../middlewares/auth.middleware";
 import { roleMiddleware } from "../middlewares/roles.middleware";
+import { sqlInjectionDetector } from "../middlewares/sql.middleware";
 
 const userRoute = Router();
 
@@ -9,7 +10,7 @@ const userController = new UserController();
 
 /**
  * @swagger
- * /v1/users/login:
+ * /users/login:
  *   post:
  *     summary: Allow users to log in or register
  *     description: Allow users to log in and stores an access token in the header
@@ -54,13 +55,13 @@ const userController = new UserController();
  *                   example: Email or password invalid
  */
 
-userRoute.post("/login", userController.loginUser);
+userRoute.post("/login", sqlInjectionDetector, userController.loginUser);
 
 
 
 /**
  * @swagger
- * /v1/users/register:
+ * /users/register:
  *   post:
  *     summary: Register a new user
  *     description: Allow a new user to register as a employee.
@@ -102,7 +103,7 @@ userRoute.post("/login", userController.loginUser);
  *                   example: Email invalid/already exists
  */
 
-userRoute.post("/register", userController.registerUser);
-userRoute.get("/admin", verifyToken, roleMiddleware(["admin"]), userController.getAdminData);
+userRoute.post("/register", sqlInjectionDetector, userController.registerUser);
+userRoute.get("/admin", sqlInjectionDetector, verifyToken, roleMiddleware(["admin"]), userController.getAdminData);
 
 export { userRoute };

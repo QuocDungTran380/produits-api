@@ -1,0 +1,33 @@
+import app from '../app';
+import supertest from 'supertest';
+import jwt from 'jsonwebtoken';
+import { config } from '../utils/config';
+
+const request = supertest(app);
+
+const employeInfo = {
+    email: "employe@gmail.com",
+    password: "employe"
+}
+
+describe("Test user signup", () => {
+    describe("POST /users/register", () => {
+        it("should signup a user", async () => {
+            const res = await request
+            .post('/users/register')
+            .send(employeInfo);
+            expect(res.status).toBe(201);
+        })
+    })
+})
+
+describe("Test user login", () => {
+    describe("POST /users/login", () => {
+        it("should login a user", async () => {
+            const res = await request
+            .post('/users/login')
+            .send(employeInfo);
+            expect(res.status).toBe(200);
+        })
+    })
+})
