@@ -14,7 +14,7 @@ describe("Test user signup", () => {
     describe("POST /users/register", () => {
         it("should signup a user", async () => {
             const res = await request
-            .post('/users/register')
+            .post('/v1/users/register')
             .send(employeInfo);
             expect(res.status).toBe(201);
         })
@@ -25,7 +25,7 @@ describe("Test user login", () => {
     describe("POST /users/login", () => {
         it("should login a user", async () => {
             const res = await request
-            .post('/users/login')
+            .post('/v1/users/login')
             .send(employeInfo);
             expect(res.status).toBe(200);
         })

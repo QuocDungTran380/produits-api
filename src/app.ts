@@ -21,6 +21,16 @@ const swaggerOptions = {
       version: '1.0.0',
       description: 'An API to manage products. To use this API, you need to register or login and enter the token in the authorization header.',
     },
+    servers: [
+      {
+        url: 'https://localhost:3000/v1',
+        description: 'Version 1 of the API',
+      },
+      {
+        url: 'https://localhost:3000/v2',
+        description: 'Version 2 of the API',
+      }
+    ],
   },
   apis: ['./src/routes/*.route.ts'],
 };
@@ -32,12 +42,14 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello, TypeScript with Express! Connexion sécurisé');
 });
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use("/v1/products", productsRoute);
 app.use("/v2/products", productsRoute);
 
-app.use("/users", userRoute);
+app.use("/v1/users", userRoute);
+app.use("/v2/users", userRoute);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 let httpApp: any;
 if (config.ENV === 'DEV') httpApp = https.createServer(certificatOptions, app);
 else if (config.ENV === 'PROD') httpApp = app;

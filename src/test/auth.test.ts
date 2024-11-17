@@ -11,9 +11,9 @@ const expiredToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQ
 
 describe("Test employee access", () => {
     describe("GET /users/admin", () => {
-        it("should return a 403 status", async () => {
+        it("should blocks access from admin data", async () => {
             const res = await request
-                .get('/users/admin')
+                .get('/v1/users/admin')
                 .set('Authorization', 'Bearer ' + employeeToken);
             expect(res.status).toBe(403);
         })
@@ -22,7 +22,7 @@ describe("Test employee access", () => {
 
 describe("Test employee permissions", () => {
     describe("DELETE /v1/products/:id", () => {
-        it("should return a 403 status", async () => {
+        it("should block employee CRUD permissions", async () => {
             const res = await request
                 .delete('/v1/products/7')
                 .set('Authorization', 'Bearer ' + employeeToken);
@@ -33,18 +33,18 @@ describe("Test employee permissions", () => {
 
 describe("Test admin access", () => {
     describe("GET /users/admin", () => {
-        it("should get admin data", async () => {
+        it("should allow admin data access", async () => {
             const res = await request
-                .get('/users/admin')
+                .get('/v1/users/admin')
                 .set('Authorization', 'Bearer ' + adminToken);
             expect(res.body).toStrictEqual({ message: 'Administrateur connecté: données réservées aux administrateurs.' });
         })
     })
 })
 
-describe("Test admin permissions", () => {
+describe("Test admin permissions (CRUD)", () => {
     describe("DELETE /v1/products/:id", () => {
-        it("should delete a product", async () => {
+        it("should allow admin to delete a product", async () => {
             const res = await request
                 .delete('/v1/products/7')
                 .set('Authorization', 'Bearer ' + adminToken);

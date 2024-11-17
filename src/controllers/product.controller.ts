@@ -13,7 +13,6 @@ export class ProductController {
     public async getProducts(req: Request, res: Response): Promise<void> {
         try {
             const version = ProductController.getVersion(req);
-            console.log(version);
             if (Object.keys(req.query).length == 0) {
                 const productsList = await ProductService.filterProducts(version);
                 res.status(200).json(productsList);

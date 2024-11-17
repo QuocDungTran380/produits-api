@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { warnLogger } from "./logger.middleware";
 
 function hasSQLInjection(input: any): boolean {
     const sqlInjectionPatterns = [
@@ -42,6 +43,7 @@ export function sqlInjectionDetector(req: Request, res: Response, next: NextFunc
     const bodyParams = Object.values(req.body);
     for (let param of [...queryParams, ...bodyParams]) {
       if (hasSQLInjection(param)) {
+        warnLogger.warn(`SQL Injection detected in parameter: ${param}`);
         return res.status(400).json({
           message: "Potential SQL Injection detected.",
         });

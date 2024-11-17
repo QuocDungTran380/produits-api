@@ -23,7 +23,7 @@ const productsController = new ProductController();
  
 /**
  * @swagger
- * /v1/products:
+ * /products:
  *   get:
  *     summary: Display products.
  *     description: Allow users to view all products or filter them by price or stock
@@ -118,7 +118,7 @@ const productsController = new ProductController();
 productsRoute.get("/", sqlInjectionDetector, verifyToken, roleMiddleware(["employe", "admin"]), productsController.getProducts);
 /**
  * @swagger
- * /v1/products:
+ * /products:
  *   post:
  *     summary: Add a new product
  *     description: Add a new product to the database.
@@ -206,7 +206,7 @@ productsRoute.post("/", sqlInjectionDetector, verifyToken, roleMiddleware(["admi
 
 /**
  * @swagger
- * /v1/products/{id}:
+ * /products/{id}:
  *   put:
  *     summary: Modify a product
  *     description: Modify a product from the database with an id and new values.
@@ -307,7 +307,7 @@ productsRoute.put("/:id", sqlInjectionDetector, verifyToken, roleMiddleware(["ad
 
 /**
  * @swagger
- * /v1/products/{id}:
+ * /products/{id}:
  *   delete:
  *     summary: Delete a product
  *     description: Delete a product from the database with an id
