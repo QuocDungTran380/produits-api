@@ -1,4 +1,4 @@
-name: Product API
+name: API Test
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - dev
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     env:
@@ -29,3 +29,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Run Artillery tests
+        run: npx artillery run test.load.yaml
