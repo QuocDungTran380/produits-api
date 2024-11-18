@@ -9,11 +9,11 @@ on:
       - dev
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [ 14, 16, 18, 20 ]
+        node: [14, 16, 18, 20]
 
     env:
       PORT: 3000
