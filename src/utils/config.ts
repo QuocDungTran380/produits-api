@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-import * as mongoose from 'mongodb';
 
 dotenv.config();
 

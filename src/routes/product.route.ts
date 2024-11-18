@@ -1,4 +1,4 @@
-import { request, Request, Response, Router } from "express";
+import { Router } from "express";
 import { ProductController } from "../controllers/product.controller";
 import { verifyToken } from "../middlewares/auth.middleware";
 import { roleMiddleware } from "../middlewares/roles.middleware";

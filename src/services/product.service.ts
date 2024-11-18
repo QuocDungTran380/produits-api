@@ -1,10 +1,9 @@
 import fs from "fs";
 
-import mongoose, { Mongoose } from "mongoose";
-import { getProductsCollection } from "../mongoCollection";
-import { Product } from "../models/productSchema.model";
-import { ProductModel } from "../models/product.model";
 import { infoLogger } from "../middlewares/logger.middleware";
+import { ProductModel } from "../models/product.model";
+import { Product } from "../models/productSchema.model";
+import { getProductsCollection } from "../mongoCollection";
 
 export class ProductService {
     private static async getData(version: string): Promise<Array<ProductModel>> {

@@ -5,11 +5,10 @@ import { config } from "../utils/config";
 
 const request = supertest(app);
 
-
 const token = jwt.sign({ email: "test@gmail.com", accountType: "admin"}, config.JWT_SECRET);
 
 describe("Test v1 products", () => {
-    describe("GET /v1/products", () => {
+    describe("GET /v2/products", () => {
         it("should return a list of products", async () => {
             const res = await request
             .get('/v1/products')
@@ -18,7 +17,7 @@ describe("Test v1 products", () => {
         })
     })
 
-    describe("POST /v1/products", () => {
+    describe("POST /v2/products", () => {
       it("should add a new product", async () => {
         const res = await request
         .post('/v1/products')
@@ -34,10 +33,10 @@ describe("Test v1 products", () => {
       })
     })
 
-    describe("PUT /v1/products/:id", () => {
+    describe("PUT /v2/products/:id", () => {
       it ("should modify a product", async () => {
         const res = await request
-        .put('/v1/products/1')
+        .put('/v1/products/2')
         .set('Authorization', 'Bearer ' + token)
         .send({
             title: "test",
@@ -49,10 +48,10 @@ describe("Test v1 products", () => {
       })
     })
 
-    describe("DELETE /v1/products/:id", () => {
+    describe("DELETE /v2/products/:id", () => {
       it ("should delete a product", async () => {
         const res = await request
-        .delete('/v1/products/1')
+        .delete('/v1/products/5')
         .set('Authorization', 'Bearer ' + token);
         expect(res.status).toBe(204);
       })
