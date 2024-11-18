@@ -4,10 +4,17 @@ import { ProductService } from "../services/product.service";
 
 export class ProductController {
 
+    private static getVersion(req: Request): string {
+        let version: string;
+        req.originalUrl.includes("/v1/") ? version = "v1" : version = "v2";
+        return version;
+    }
+
     public async getProducts(req: Request, res: Response): Promise<void> {
         try {
+            const version = ProductController.getVersion(req);
             if (Object.keys(req.query).length == 0) {
-                const productsList = await ProductService.filterProducts();
+                const productsList = await ProductService.filterProducts(version);
                 res.status(200).json(productsList);
             } else {
                 if ((req.query.minPrice && isNaN(req.query.minPrice as any)) || (req.query.maxPrice && isNaN(req.query.maxPrice as any)) || (req.query.minStock && isNaN(req.query.minStock as any)) || (req.query.maxStock && isNaN(req.query.maxStock as any))) {
@@ -18,7 +25,7 @@ export class ProductController {
                     const maxPrice = req.query.maxPrice ? parseFloat(req.query.maxPrice as string) : undefined;
                     const minStock = req.query.minStock ? parseFloat(req.query.minStock as string) : undefined;
                     const maxStock = req.query.maxStock ? parseFloat(req.query.maxStock as string) : undefined;
-                    const productsList = await ProductService.filterProducts(minPrice, maxPrice, minStock, maxStock);
+                    const productsList = await ProductService.filterProducts(version, minPrice, maxPrice, minStock, maxStock);
                     if (productsList == null) {
                         errorLogger.error("Invalid request");
                         res.status(400).json({ error: "Invalid request" });
@@ -37,13 +44,14 @@ export class ProductController {
 
     public async addProduct(req: Request, res: Response): Promise<void> {
         try {
+            const version = ProductController.getVersion(req);
             if (req.body.title, req.body.description, req.body.category, req.body.quantity, req.body.price) {
                 const title = req.body.title
                 const description = req.body.description;
                 const category = req.body.category;
                 const quantity = Number(req.body.quantity);
                 const price = Number(req.body.price);
-                await ProductService.addProduct(title, description, category, quantity, price).then((result) => {
+                await ProductService.addProduct(version, title, description, category, quantity, price).then((result) => {
                     if (result == 1) {
                         infoLogger.info("New product added");
                         res.status(201).json({ message: "Product added successfully" });
@@ -60,6 +68,7 @@ export class ProductController {
     }
     public async modifyProduct(req: Request, res: Response): Promise<void> {
         try {
+            const version = ProductController.getVersion(req);
             if (req.params.id && (req.body.title || req.body.description || req.body.quantity || req.body.price)) {
                 const titleRegex = /^[a-zA-Z]{3,50}$/;
                 const descriptionRegex = /^[a-zA-Z]{3,100}$/;
@@ -72,7 +81,7 @@ export class ProductController {
                 const quantity = Number(req.body?.quantity);
                 const price = Number(req.body?.price);
                 if (quantityRegex.test(id.toString()) && titleRegex.test(title) && descriptionRegex.test(description) && quantityRegex.test(quantity.toString()) && priceRegex.test(price.toString())) {
-                    await ProductService.modifyProduct(id, title, description, quantity, price).then((result) => {
+                    await ProductService.modifyProduct(version, id, title, description, quantity, price).then((result) => {
                         if (result == 1) {
                             infoLogger.info(`Product ${id} changed`);
                             res.status(200).json({ message: "Product changed successfully" });
@@ -97,10 +106,11 @@ export class ProductController {
 
     public async deleteProduct(req: Request, res: Response): Promise<void> {
         try {
+            const version = ProductController.getVersion(req);
             if (req.params.id) {
                 const id = Number(req.params.id);
                 if (!isNaN(id)) {
-                    await ProductService.deleteProduct(id).then((result) => {
+                    await ProductService.deleteProduct(version, id).then((result) => {
                         if (result == 1) {
                             infoLogger.info(`Product ${id} deleted`);
                             res.status(204).json({ message: "Product deleted successfully" });

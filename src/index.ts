@@ -1,13 +1,19 @@
 import httpApp from './app';
-import { PopulateProducts, PopulateUsers } from './populateBD';
+import { ConnectToMongoDB } from './mongoConnection';
+import { PopulateJSON, PopulateProducts, PopulateUsers } from './populateBD';
 import { config } from "./utils/config";
 
-const port = config.port || 4000;
+const port = config.PORT;
 
 // Démarrage du serveur
 httpApp.listen(port, () => {
   console.log(`Serveur en écoute sur <https://localhost>:${port}`);
 });
 
-PopulateProducts();
+ConnectToMongoDB().then(() => {
+  console.log("Fetching products and users...");
+  PopulateProducts();
+})
+
 PopulateUsers();
+PopulateJSON();

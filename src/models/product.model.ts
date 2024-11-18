@@ -1,12 +1,21 @@
-import { Product } from "../interfaces/product.interface";
+import { ProductInterface } from "../interfaces/product.interface";
 
-export class ProductModel implements Product {
-    constructor(
-        public id: number,
-        public title: string,
-        public description: string,
-        public category: string,
-        public quantity: number,
-        public price: number
-    ) {}
-};
+class ProductModel implements ProductInterface {
+    id: number;
+    title: string;
+    description: string;
+    category: string;
+    quantity: number;
+    price: number;
+
+    constructor(product: ProductInterface) {
+        this.id = product.id;
+        this.title = product.title;
+        this.description = product.description;
+        this.category = product.category;
+        this.quantity = product.quantity;
+        this.price = product.price;
+    }
+}
+
+export { ProductModel };

@@ -1,0 +1,44 @@
+config:
+  target: 'https://localhost:3000'
+  phases:
+    - duration: 60  # Duration of the test in seconds
+      arrivalRate: 10  # Requests per second
+  tls:
+    rejectUnauthorized: false  # Ignore self-signed certificates
+before:
+  flow:
+    - log: "Getting JWT token"
+    - post:
+        url: '/v1/users/login'
+        json:
+          email: 'admin@gmail.com'
+          password: 'admin'
+        capture:
+          - json: $.token
+            as: token
+scenarios:
+  - name: User login
+    flow:
+      - post:
+          url: '/v1/users/register'
+          json:
+            email: "{{ $randomString() }}@gmail.com"
+            password: 'test'
+  - name: Get Products
+    flow:
+      - get:
+          url: "/v1/products"
+          headers:
+            Authorization: "Bearer {{ token }}"
+  - name: Add product
+    flow:
+      - post:
+          url: "/v1/products"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          json:
+            title: product
+            description: test
+            category: fruits
+            quantity: 23
+            price: 100.00

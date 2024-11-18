@@ -1,0 +1,37 @@
+name: API Test
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      PORT: 3000
+      JWT_SECRET: "1e657d0d73bece9f4f8a0b39e423cb6c79c3b8b0b563c1f334b4ab594b1f0def09881846a33da6e8c6806a8d3f208efc1b17f9a70f741c1daf9f4d10a34d85952e3e7db884fadae784e7b69b9a485bc4254bad9ba7bf439dd439706853e5be5c87e19bd270316fba1df4bf888af6f424f665cdefc4224226020823fec488d779ad1ddf9e88b4f67882daf7487693276307ec8e9378fb61e7c159fa3c71441aef34b9378619d5dc1cfb41fb660bf203e57e4d67d7ca70d1a2fadb56e64d14f73a1aa92a0ec5245d42411e2cbc06b72d40e5a286e400a3f11c7c7b8e871dcc5ed7adb9d0e5965f71bf31c43f453836f79770118ccd523990a7b7fcc904657b3c7e"
+      ENV: "DEV"
+      DB_URL: "mongodb+srv://420-514_A24:Str0ng_P%40ssw0rd_420-514@quoc-cluster.u2t9z.mongodb.net/?retryWrites=true&w=majority&appName=quoc-cluster"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Build
+        run: npm run build

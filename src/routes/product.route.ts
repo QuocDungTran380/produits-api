@@ -1,7 +1,8 @@
-import { Request, Response, Router } from "express";
+import { Router } from "express";
 import { ProductController } from "../controllers/product.controller";
 import { verifyToken } from "../middlewares/auth.middleware";
 import { roleMiddleware } from "../middlewares/roles.middleware";
+import { sqlInjectionDetector } from "../middlewares/sql.middleware";
 
 const productsRoute = Router();
 
@@ -22,7 +23,7 @@ const productsController = new ProductController();
  
 /**
  * @swagger
- * /v1/products:
+ * /products:
  *   get:
  *     summary: Display products.
  *     description: Allow users to view all products or filter them by price or stock
@@ -114,10 +115,10 @@ const productsController = new ProductController();
  */
 
 // GET - Récupérer les livres
-productsRoute.get("/", verifyToken, roleMiddleware(["employe", "admin"]), productsController.getProducts);
+productsRoute.get("/", sqlInjectionDetector, verifyToken, roleMiddleware(["employe", "admin"]), productsController.getProducts);
 /**
  * @swagger
- * /v1/products:
+ * /products:
  *   post:
  *     summary: Add a new product
  *     description: Add a new product to the database.
@@ -201,11 +202,11 @@ productsRoute.get("/", verifyToken, roleMiddleware(["employe", "admin"]), produc
  *                   example: Internal server error
  */
 
-productsRoute.post("/", verifyToken, roleMiddleware(["admin"]), productsController.addProduct);
+productsRoute.post("/", sqlInjectionDetector, verifyToken, roleMiddleware(["admin"]), productsController.addProduct);
 
 /**
  * @swagger
- * /v1/products/{id}:
+ * /products/{id}:
  *   put:
  *     summary: Modify a product
  *     description: Modify a product from the database with an id and new values.
@@ -302,11 +303,11 @@ productsRoute.post("/", verifyToken, roleMiddleware(["admin"]), productsControll
  *                   example: Internal server error
  */
 
-productsRoute.put("/:id", verifyToken, roleMiddleware(["admin"]), productsController.modifyProduct);
+productsRoute.put("/:id", sqlInjectionDetector, verifyToken, roleMiddleware(["admin"]), productsController.modifyProduct);
 
 /**
  * @swagger
- * /v1/products/{id}:
+ * /products/{id}:
  *   delete:
  *     summary: Delete a product
  *     description: Delete a product from the database with an id
@@ -384,6 +385,6 @@ productsRoute.put("/:id", verifyToken, roleMiddleware(["admin"]), productsContro
  *                   example: Internal server error
  */
 
-productsRoute.delete("/:id", verifyToken, roleMiddleware(["admin"]), productsController.deleteProduct);
+productsRoute.delete("/:id", sqlInjectionDetector, verifyToken, roleMiddleware(["admin"]), productsController.deleteProduct);
 
 export { productsRoute };

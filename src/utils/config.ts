@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const config = {
-  port: process.env.PORT,
+  PORT: process.env?.PORT || "",
   JWT_SECRET: process.env.JWT_SECRET || "",
-  ENV: process.env.ENV
+  ENV: process.env.ENV || "",
+  DB_URI: process.env.DB_URI || "",
 };
