@@ -346,5 +346,11 @@
         "email": "J90vrBAF6y@gmail.com",
         "password": "$2a$10$szFJCwX2cRjomk3/Y.z5Z.uKowJHqwNTvQ6/yOSQr2oAGwUtQj87m",
         "role": "employee"
+    },
+    {
+        "id": 37,
+        "email": "employe@gmail.com",
+        "password": "$2a$10$K6rZElgQIp9LBjEH22nGuOPSC3unD1J4t5A0CnxN8.U4nJ6U3ZgS2",
+        "role": "employee"
     }
 ]

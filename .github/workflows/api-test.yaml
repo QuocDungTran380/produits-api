@@ -9,8 +9,12 @@ on:
       - dev
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
 
     env:
       PORT: 3000
@@ -19,20 +23,23 @@ jobs:
       DB_URL: "mongodb+srv://420-514_A24:Str0ng_P%40ssw0rd_420-514@quoc-cluster.u2t9z.mongodb.net/?retryWrites=true&w=majority&appName=quoc-cluster"
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Clone repository
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
         with:
-          node-version: '14'
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm install
+
+      - name: Build API
+        run: npm run start
 
       - name: Run API tests
         run: npm test
 
       - name: Run Artillery tests
-        run: |
-          npx artillery run test.load.yaml
+        run: npx artillery run test.load.yaml
