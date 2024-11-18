@@ -1,42 +1,17 @@
 import fs from "fs";
-// import { Product } from "../models/productSchema.model";
-// import { Collection } from "mongoose";
-// import { collections } from "../utils/config";
 
 import mongoose, { Mongoose } from "mongoose";
 import { getProductsCollection } from "../mongoCollection";
 import { Product } from "../models/productSchema.model";
 import { ProductModel } from "../models/product.model";
+import { infoLogger } from "../middlewares/logger.middleware";
 
 export class ProductService {
-
-    // private static getDataFromJson(): Produit[] {
-    //     const data = fs.readFileSync("./database/products.json", "utf-8");
-    //     return JSON.parse(data);
-    // }
-
-    // private static async getDataFromMango(): Promise<Array<Produit>> {
-    //     let productsList: any = [];
-    //     const collection = await getProductsCollection();
-    //     collection.find().map((p: any) => {
-    //         p = new Product({
-    //             id: p.id,
-    //             title: p.title,
-    //             description: p.description,
-    //             category: p.category,
-    //             quantity: p.quantity,
-    //             price: p.price
-    //         });
-    //         productsList.push(p);
-    //     });
-    //     return productsList;
-    // }
     private static async getData(version: string): Promise<Array<ProductModel>> {
         let productsList: any = [];
         if (version === 'v1') {
             const data = fs.readFileSync("./database/products.json", "utf-8");
             productsList = JSON.parse(data);
-            console.log('fetched from v1')
         } else if (version === 'v2') {
             productsList = (await (await getProductsCollection()).find().toArray()).map((product) => {
                 return new ProductModel({
@@ -48,7 +23,6 @@ export class ProductService {
                     price: product.price
                 })
             });
-            console.log('fetched from v2')
         }
         return productsList;
     }
@@ -57,12 +31,12 @@ export class ProductService {
         if (version === 'v1') {
             const productsToWrite = JSON.stringify(productsList, null, 4);
             fs.writeFileSync("./database/products.json", productsToWrite);
-            console.log('written to v1')
+            infoLogger.info('written to v1')
         } else if (version === 'v2') {
             const collection = await getProductsCollection();
             await collection.deleteMany({});
             await collection.insertMany(productsList);
-            console.log('written to v2')
+            infoLogger.info('written to v2')
         }
     }
 

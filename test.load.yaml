@@ -17,13 +17,13 @@ before:
           - json: $.token
             as: token
 scenarios:
-  - name: User register
+  - name: User login
     flow:
       - post:
-          url: "/v1/users/register"
+          url: '/v1/users/register'
           json:
-            email: "testuser@example.com"
-            password: "password123"
+            email: "{{ $randomString() }}@gmail.com"
+            password: 'test'
   - name: Get Products
     flow:
       - get:
@@ -37,8 +37,8 @@ scenarios:
           headers:
             Authorization: "Bearer {{ token }}"
           json:
-            title: "product1"
-            description: "test"
-            category: "fruits"
-            quantity: 10
-            price: 100
+            title: product
+            description: test
+            category: fruits
+            quantity: 23
+            price: 100.00

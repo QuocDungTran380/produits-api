@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import httpApp from './app';
 import { ConnectToMongoDB } from './mongoConnection';
 import { PopulateJSON, PopulateProducts, PopulateUsers } from './populateBD';

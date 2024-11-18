@@ -9,5 +9,3 @@ export const config = {
   ENV: process.env.ENV || "",
   DB_URI: process.env.DB_URI || "",
 };
-
-// export const productsCollection: { products?: mongoose.Collection } = {};

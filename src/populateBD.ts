@@ -29,7 +29,6 @@ export const PopulateJSON = () => {
 
 export const PopulateProducts = () => {
     getProductsCollection().then((collection) => collection.deleteMany({})).then(() => {
-        console.log("Collection cleared");
         fetch('https://fakestoreapi.com/products')
             .then(res => res.json())
             .then(json => {
@@ -44,8 +43,9 @@ export const PopulateProducts = () => {
                             price: product.price
                         })
 
-                        product.save().then(() => console.log("Product fetched and saved to database"));
+                        product.save();
                     })
+                    console.log("Products fetched successfully");
                 } catch (error) {
                     console.log("Error fetching products: ", error);
                 }

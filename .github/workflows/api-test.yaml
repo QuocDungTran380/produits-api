@@ -1,0 +1,24 @@
+name: API Test
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+      - name: Install dependencies
+        run: npm install
+
+      -name: Run Jest tests
+        run:
+          npm test
+
+      - name: Run Artillery tests
+        run:
+          npx artillery run test.load.yaml
