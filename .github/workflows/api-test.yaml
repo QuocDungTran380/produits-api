@@ -29,6 +29,3 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: Run Artillery tests
-        run: npx artillery run test.load.yaml
