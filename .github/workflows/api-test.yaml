@@ -1,12 +1,12 @@
-name: API Test
+name: Products API
 
 on:
   push:
     branches:
-      - main
+      - dev
   pull_request:
     branches:
-      - main
+      - dev
 
 jobs:
   test:
