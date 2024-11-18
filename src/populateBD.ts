@@ -28,7 +28,6 @@ export const PopulateJSON = () => {
 }
 
 export const PopulateProducts = () => {
-    console.log("Populating products...");
     getProductsCollection().then((collection) => collection.deleteMany({})).then(() => {
         fetch('https://fakestoreapi.com/products')
             .then(res => res.json())

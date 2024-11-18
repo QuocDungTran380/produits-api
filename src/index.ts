@@ -10,6 +10,10 @@ httpApp.listen(port, () => {
   console.log(`Serveur en écoute sur <https://localhost>:${port}`);
 });
 
-ConnectToMongoDB().then(() => PopulateProducts());
+ConnectToMongoDB().then(() => {
+  console.log("Fetching products and users...");
+  PopulateProducts();
+})
+
 PopulateUsers();
 PopulateJSON();
