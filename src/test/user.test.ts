@@ -1,7 +1,5 @@
 import app from '../app';
 import supertest from 'supertest';
-import jwt from 'jsonwebtoken';
-import { config } from '../utils/config';
 
 const request = supertest(app);
 

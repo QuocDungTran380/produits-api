@@ -10,202 +10,410 @@
 			"name": "Products requests",
 			"item": [
 				{
-					"name": "Get all products",
-					"event": [
+					"name": "v1",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://localhost:3000/v1/products",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"v1",
-								"products"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Filter products",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://localhost:3000/v1/products?minPrice=25.25&maxPrice=75.99&minStock=25&maxStock=100",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"v1",
-								"products"
-							],
-							"query": [
+							"name": "Get all products",
+							"event": [
 								{
-									"key": "minPrice",
-									"value": "25.25"
-								},
-								{
-									"key": "maxPrice",
-									"value": "75.99"
-								},
-								{
-									"key": "minStock",
-									"value": "25"
-								},
-								{
-									"key": "maxStock",
-									"value": "100"
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add product",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"title\": \"pommes\",\r\n  \"description\": \"gala\",\r\n  \"category\": \"fruits\",\r\n  \"quantity\": 23,\r\n  \"price\": 2.5\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:3000/v1/products",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"products"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "https://localhost:3000/v1/products",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"v1",
-								"products"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Modify product",
-					"event": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"title\": \"poires\",\r\n  \"description\": \"verte\",\r\n  \"quantity\": 20,\r\n  \"price\": 1.25\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"name": "Filter products",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
 								}
-							}
-						},
-						"url": {
-							"raw": "https://localhost:3000/v1/products/315",
-							"protocol": "https",
-							"host": [
-								"localhost"
 							],
-							"port": "3000",
-							"path": [
-								"v1",
-								"products",
-								"315"
-							]
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:3000/v1/products?minPrice=25.25&maxPrice=75.99&minStock=25&maxStock=100",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"products"
+									],
+									"query": [
+										{
+											"key": "minPrice",
+											"value": "25.25"
+										},
+										{
+											"key": "maxPrice",
+											"value": "75.99"
+										},
+										{
+											"key": "minStock",
+											"value": "25"
+										},
+										{
+											"key": "maxStock",
+											"value": "100"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add product",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"pommes\",\r\n  \"description\": \"gala\",\r\n  \"category\": \"fruits\",\r\n  \"quantity\": 23,\r\n  \"price\": 2.5\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:3000/v1/products",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Modify product",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"poires\",\r\n  \"description\": \"verte\",\r\n  \"quantity\": 20,\r\n  \"price\": 1.25\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:3000/v1/products/315",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"products",
+										"315"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete product",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:3000/v1/products/315",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"products",
+										"315"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Delete product",
-					"event": [
+					"name": "v2",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "https://localhost:3000/v1/products/315",
-							"protocol": "https",
-							"host": [
-								"localhost"
+							"name": "Get all products",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
 							],
-							"port": "3000",
-							"path": [
-								"v1",
-								"products",
-								"315"
-							]
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:3000/v1/products",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filter products",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:3000/v1/products?minPrice=25.25&maxPrice=75.99&minStock=25&maxStock=100",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"products"
+									],
+									"query": [
+										{
+											"key": "minPrice",
+											"value": "25.25"
+										},
+										{
+											"key": "maxPrice",
+											"value": "75.99"
+										},
+										{
+											"key": "minStock",
+											"value": "25"
+										},
+										{
+											"key": "maxStock",
+											"value": "100"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add product",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"pommes\",\r\n  \"description\": \"gala\",\r\n  \"category\": \"fruits\",\r\n  \"quantity\": 23,\r\n  \"price\": 2.5\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:3000/v1/products",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Modify product",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"poires\",\r\n  \"description\": \"verte\",\r\n  \"quantity\": 20,\r\n  \"price\": 1.25\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:3000/v1/products/315",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"products",
+										"315"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete product",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:3000/v1/products/315",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"products",
+										"315"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			],
 			"auth": {
@@ -313,14 +521,13 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:3000/v1/users/register",
+							"raw": "https://localhost:3000/users/register",
 							"protocol": "https",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"v1",
 								"users",
 								"register"
 							]
@@ -355,13 +562,14 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:3000/users/login",
+							"raw": "https://localhost:3000/v2/users/login",
 							"protocol": "https",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
+								"v2",
 								"users",
 								"login"
 							]
@@ -388,7 +596,49 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"john@gmail.com\",\r\n    \"password\": \"wrongpass\"\r\n}",
+							"raw": "{\r\n    \"email\": \"john@gmail.com\",\r\n    \"password\": \"'OR=1=1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:3000/v1/users/login",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SQL Injection test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"john@gmail.com\",\r\n    \"password\": \"'OR=1=1\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -427,7 +677,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:3000/v1/users/admin",
+							"raw": "https://localhost:3000/v1/products?minPrice=25.25&maxPrice=75.99&minStock=25&maxStock='",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -435,8 +685,25 @@
 							"port": "3000",
 							"path": [
 								"v1",
-								"users",
-								"admin"
+								"products"
+							],
+							"query": [
+								{
+									"key": "minPrice",
+									"value": "25.25"
+								},
+								{
+									"key": "maxPrice",
+									"value": "75.99"
+								},
+								{
+									"key": "minStock",
+									"value": "25"
+								},
+								{
+									"key": "maxStock",
+									"value": "'"
+								}
 							]
 						}
 					},
