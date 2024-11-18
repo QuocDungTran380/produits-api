@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev --respawn src/index.ts",
-    "test": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 jest"
+    "test": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 jest",
+    "build": "tsc --build"
   },
   "keywords": [],
   "author": "",
